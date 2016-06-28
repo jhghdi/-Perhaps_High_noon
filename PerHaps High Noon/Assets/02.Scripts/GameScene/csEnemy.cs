@@ -2,41 +2,61 @@
 
 public class csEnemy : MonoBehaviour {
 
-    public GameObject note;
+    public GameObject stadardNote;
+	public GameObject highnoonNote;
+	GameObject sNote;
+	GameObject hNote;
 
     public bool isLeft = true;
 
-    float moveSpeed = 5.0f;
+   // float moveSpeed = 5.0f;
 
-    // test code
-    int rand;
-    float time = 0;
+
 
     // Use this for initialization
     void Start () {
-        rand = 30;
+		Vector3 v = transform.position + Vector3.up *2;
+
+		sNote = Instantiate(stadardNote, v, Quaternion.identity) as GameObject;
+		sNote.transform.parent = transform;
+		sNote.SetActive (true);
+
+		hNote = Instantiate(highnoonNote, v, Quaternion.identity) as GameObject;
+		hNote.transform.parent = transform;
+		hNote.SetActive (false);
+
     }
 	
 	// Update is called once per frame
 	void Update () {
 
-        if (isLeft)
-            transform.Translate(moveSpeed * Time.deltaTime, 0, 0);
-        else
-            transform.Translate(-moveSpeed * Time.deltaTime, 0, 0);
-
-        if (time > rand)
-        { 
-            moveSpeed = 0;
-          //Instantiate(note, transform.position, Quaternion.identity);
-            rand = 100000;
-           GameObject obj = Instantiate(note, transform.position, Quaternion.identity) as GameObject;
-            obj.transform.parent = transform;
-        }
-        else
-         ++time;
+//        if (isLeft)
+//            transform.Translate(moveSpeed * Time.deltaTime, 0, 0);
+//        else
+//            transform.Translate(-moveSpeed * Time.deltaTime, 0, 0);
+//
+//        if (time > rand)
+//        { 
+//            moveSpeed = 0;
+//          //Instantiate(note, transform.position, Quaternion.identity);
+//            rand = 100000;
+//           
+//        }
+//        else
+//         ++time;
     }
 
+
+	public void OnChangeNote(bool isHighNoon)
+	{
+		if (isHighNoon) {
+			sNote.SetActive (false);
+			hNote.SetActive (true);
+		} else {
+			sNote.SetActive (true);
+			hNote.SetActive (false);
+		}
+	}
     //void OnCollisionEnter(Collision col)
     //{
     //    if (col.gameObject.tag == "Stop")
