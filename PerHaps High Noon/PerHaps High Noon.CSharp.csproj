@@ -63,13 +63,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\02.Scripts\GameScene\csEnemy.cs" />
-    <Compile Include="Assets\02.Scripts\GameScene\csGameManager.cs" />
-    <Compile Include="Assets\02.Scripts\GameScene\csNote.cs" />
-    <Compile Include="Assets\02.Scripts\GameScene\csPlayer.cs" />
-    <Compile Include="Assets\02.Scripts\MainScene\csMain.cs" />
-    <Compile Include="Assets\02.Scripts\MainScene\csPause.cs" />
-    <Compile Include="Assets\02.Scripts\MainScene\csStage.cs" />
+    <Compile Include="Assets\02.Scripts\Global\Common.cs" />
+    <Compile Include="Assets\02.Scripts\Manager\csEnemyManager.cs" />
+    <Compile Include="Assets\02.Scripts\Manager\csGameManager.cs" />
+    <Compile Include="Assets\02.Scripts\Manager\csInputManager.cs" />
+    <Compile Include="Assets\02.Scripts\Manager\csSpawnManager.cs" />
+    <Compile Include="Assets\02.Scripts\PlayScene\csEnemy.cs" />
+    <Compile Include="Assets\02.Scripts\PlayScene\csNote.cs" />
+    <Compile Include="Assets\02.Scripts\PlayScene\csPause.cs" />
+    <Compile Include="Assets\02.Scripts\PlayScene\csPlayer.cs" />
+    <Compile Include="Assets\02.Scripts\csMain.cs" />
+    <Compile Include="Assets\02.Scripts\csStage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
