@@ -1,5 +1,6 @@
 *.meta
 metadata\
+library\
 #################
 ## Eclipse
 #################
@@ -223,4 +224,5 @@ pip-log.txt
 *.info
 *.dll
 *.mdb
+*.asset
 *.asset
