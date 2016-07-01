@@ -220,3 +220,7 @@ pip-log.txt
 #UnityFile
 *.meta
 *.csproj
+*.info
+*.dll
+*.mdb
+*.asset
