@@ -1,83 +1,83 @@
 ﻿using UnityEngine;
 
 public class csInputManager : MonoBehaviour {
-    
-    /// <summary>
-    /// Platform 정의
-    /// </summary>
-    enum PLATFORM { ANDROID = 0, EDITOR = 1 };
 
-    /// <summary>
-    /// Player 객체
-    /// </summary>
-    public GameObject player;
+	/// <summary>
+	/// Platform 정의
+	/// </summary>
+	enum PLATFORM { ANDROID = 0, EDITOR = 1 };
 
-    /// <summary>
-    /// Player의 Method 
-    /// </summary>
-    csPlayer playerMethod;
+	/// <summary>
+	/// Player 객체
+	/// </summary>
+	public GameObject player;
 
-    /// <summary>
-    /// 현재 platform
-    /// </summary>
-    PLATFORM platform;
+	/// <summary>
+	/// Player의 Method 
+	/// </summary>
+	csPlayer playerMethod;
 
-    // Use this for initialization
-    void Start () {
-        playerMethod = player.GetComponent<csPlayer>();
+	/// <summary>
+	/// 현재 platform
+	/// </summary>
+	PLATFORM platform;
 
-        if (Application.platform == RuntimePlatform.Android)
-            platform = PLATFORM.ANDROID;
-        else
-            platform = PLATFORM.EDITOR;
-    }
+	// Use this for initialization
+	void Start () {
+		playerMethod = player.GetComponent<csPlayer>();
 
-    // Update is called once per frame
-    void Update() {
+		if (Application.platform == RuntimePlatform.Android)
+			platform = PLATFORM.ANDROID;
+		else
+			platform = PLATFORM.EDITOR;
+	}
 
-        // 플랫폼에 따른 인식 확인
-        if (platform == PLATFORM.ANDROID && Input.touches != null)
-              DoTouch();
+	// Update is called once per frame
+	void Update() {
 
-        else if (platform == PLATFORM.EDITOR)
-              DoClick();
-    }
+		// 플랫폼에 따른 인식 확인
+		if (platform == PLATFORM.ANDROID && Input.touches != null)
+			DoTouch();
 
-    /// <summary>
-    /// touch의 행동을 체크한다.
-    /// </summary>
-    private void DoTouch()
-    {
-        Touch touch = Input.touches[0];
-        Vector3 position = touch.position;
-        Common.INPUT inputStatus = Common.INPUT.INPUT_BEGIN;
+		else if (platform == PLATFORM.EDITOR)
+			DoClick();
+	}
 
-        if (touch.phase == TouchPhase.Began)
-            inputStatus = Common.INPUT.INPUT_BEGIN;
-        else if (touch.phase == TouchPhase.Moved)
-            inputStatus = Common.INPUT.INPUT_MOVE;
-        else if (touch.phase == TouchPhase.Ended)
-            inputStatus = Common.INPUT.INPUT_END;
+	/// <summary>
+	/// touch의 행동을 체크한다.
+	/// </summary>
+	private void DoTouch()
+	{
+		Touch touch = Input.touches[0];
+		Vector3 position = touch.position;
+		Common.INPUT inputStatus = Common.INPUT.INPUT_BEGIN;
 
-        playerMethod.DoAction(position, inputStatus);
-    }
+		if (touch.phase == TouchPhase.Began)
+			inputStatus = Common.INPUT.INPUT_BEGIN;
+		else if (touch.phase == TouchPhase.Moved)
+			inputStatus = Common.INPUT.INPUT_MOVE;
+		else if (touch.phase == TouchPhase.Ended)
+			inputStatus = Common.INPUT.INPUT_END;
 
-    /// <summary>
-    /// mouse click이나 drag를 체크한다.
-    /// </summary>
-    private void DoClick()
-    {
-        Vector3 position = Input.mousePosition;
+		playerMethod.DoAction(position, inputStatus);
+	}
 
-       if (Input.GetButtonDown("Fire1"))
-            playerMethod.DoAction(position, Common.INPUT.INPUT_BEGIN);
-        else if (Input.GetButton("Fire1"))
-            playerMethod.DoAction(position, Common.INPUT.INPUT_MOVE);
-        else if (Input.GetButtonUp("Fire1"))
-            playerMethod.DoAction(position, Common.INPUT.INPUT_END);
-        else
-            return;
-    }
+	/// <summary>
+	/// mouse click이나 drag를 체크한다.
+	/// </summary>
+	private void DoClick()
+	{
+		Vector3 position = Input.mousePosition;
+
+		if (Input.GetButtonDown("Fire1"))
+			playerMethod.DoAction(position, Common.INPUT.INPUT_BEGIN);
+		else if (Input.GetButton("Fire1"))
+			playerMethod.DoAction(position, Common.INPUT.INPUT_MOVE);
+		else if (Input.GetButtonUp("Fire1"))
+			playerMethod.DoAction(position, Common.INPUT.INPUT_END);
+		else
+			return;
+	}
 
 }
 

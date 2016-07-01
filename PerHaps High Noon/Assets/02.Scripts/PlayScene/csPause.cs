@@ -6,6 +6,7 @@ public class csPause : MonoBehaviour {
 
 
 	public void OnPause(){
+		
 		pauseCanvas.SetActive (true);
 		Time.timeScale = 0;
 	}

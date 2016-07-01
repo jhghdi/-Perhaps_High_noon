@@ -7,6 +7,8 @@ public class csEnemy : MonoBehaviour {
 	GameObject sNote;
 	GameObject hNote;
 
+    public bool isLeft = true;
+
    // float moveSpeed = 5.0f;
 
 
@@ -28,6 +30,20 @@ public class csEnemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+//        if (isLeft)
+//            transform.Translate(moveSpeed * Time.deltaTime, 0, 0);
+//        else
+//            transform.Translate(-moveSpeed * Time.deltaTime, 0, 0);
+//
+//        if (time > rand)
+//        { 
+//            moveSpeed = 0;
+//          //Instantiate(note, transform.position, Quaternion.identity);
+//            rand = 100000;
+//           
+//        }
+//        else
+//         ++time;
     }
 
 
@@ -41,5 +57,13 @@ public class csEnemy : MonoBehaviour {
 			hNote.SetActive (false);
 		}
 	}
+    //void OnCollisionEnter(Collision col)
+    //{
+    //    if (col.gameObject.tag == "Stop")
+    //    { 
+            
+         
+    //    }
+    //}
 
 }

@@ -2,9 +2,10 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 public class csStage : MonoBehaviour {
-	int level = 1;
-	int stage = 1;
+	public int level = 1;
+	public int stage = 1;
 
+	string[] phase = { "Phase1_1" };
 	// Use this for initialization
 	void Start () {
 		DontDestroyOnLoad (this);
@@ -16,7 +17,7 @@ public class csStage : MonoBehaviour {
 	}
 	public void OnStage(int s){
 		stage = s;
-		SceneManager.LoadScene ("PlayScene");
+		SceneManager.LoadScene ("managerScene");
 	}
 
 	public void OnLevel(int l){
@@ -27,5 +28,8 @@ public class csStage : MonoBehaviour {
 		SceneManager.LoadScene ("MainScene");
 	}
 
-
+	public string[] getPhases(){
+		//parse(level,stage)
+		return phase;
+	}
 }
