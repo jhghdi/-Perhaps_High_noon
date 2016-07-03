@@ -1,4 +1,6 @@
 *.meta
+metadata\
+Library\
 #################
 ## Eclipse
 #################
@@ -215,3 +217,12 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+#UnityFile
+*.meta
+*.csproj
+*.info
+*.dll
+*.mdb
+*.asset
+*.asset
