@@ -2,25 +2,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System.Xml;
+using System;
+
+
 public class csStageManager : MonoBehaviour {
 	public GameObject EnemyManager;
 	public GameObject CamPathManager;
 	Phase myPhase = null;
 	Step myStep =null;
 	SpawnInfo mySpawnInfo = null;
-
-	int phaseNum = 0;
+    string[] phases;
+    int phaseNum = 0;
 
 	// Use this for initialization
 	IEnumerator Start () {
-		
-		csStage cs =  GameObject.Find ("GameManager").GetComponent<csStage> ();
-		string[] phases =  cs.getPhases();
 
-		SceneManager.LoadScene (phases[phaseNum]);
+        csStage cs =  GameObject.Find ("GameManager").GetComponent<csStage> ();
+        phases = cs.getPhases();
+        SceneManager.LoadScene (phases[phaseNum]);
 
 
-		myPhase = ParseXML ();
+        myPhase = ParseXML();
 		myStep = myPhase.getStep ();
 
 		yield return new WaitForSeconds (1);
@@ -61,7 +64,6 @@ public class csStageManager : MonoBehaviour {
 			//다음 phase 로딩
 			Debug.Log ("phase end");
 
-
 			if (phaseNum > 4) {
 				//결과 화면
 				Debug.Log ("result");
@@ -76,37 +78,72 @@ public class csStageManager : MonoBehaviour {
 			StartSpawn ();
 		}
 	}
+
 	Phase ParseXML(){
-		Debug.Log("paseXML");
-		Phase p = new Phase ();
+		Debug.Log("parseXML");
+		Phase phase = new Phase ();
 
-		Step s = new Step ();
-		Step s2 = new Step ();
-		Step s3 = new Step ();
-		Step s4 = new Step ();
+        // xml 파일 형식 정해지면 추가 구현
 
-		p.AddStep (s);
-		p.AddStep (s2);
-		p.AddStep (s3);
-		p.AddStep (s4);
-		//phae 정보 읽기
+        // xml 지정
+        string strPath = string.Empty;
 
-		//Phase load
-		///ddddddddddddddddddd
+        // platform별로 다르게 한다
+        #if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
+                strPath += ("file:///");
+                strPath += (Application.dataPath + "/" + string.Format("xml/{0}.xml", phases[phaseNum]) );
+        #elif UNITY_ANDROID
+                strPath = "jar:file://" + Application.streamingAssetsPath + "!/assets/"+string.Format("xml/{0}.xml", phases[phaseNum]);
+        #endif
 
-		//step load
+        //phase 정보 읽기
+        XmlDocument document = new XmlDocument();
+       document.Load(strPath);
 
-		//step add
+        // phase에 step insert
+        int itemCount = document.LastChild.ChildNodes.Count;
+        string name = string.Empty;
 
-		//phase add
+        for (int i = 0; i < document.LastChild.ChildNodes.Count; ++i)
+        {
+            if (name != document.LastChild.ChildNodes[i].Name)
+            {
+                phase.AddStep(new Step());
+                name = document.LastChild.ChildNodes[i].Name;
+            }
+        }
 
+        // step에 spawn insert
+        int index = -1;
+        for (int i = 0; i < document.LastChild.ChildNodes.Count; ++i)
+        {
+            //step load
+            XmlNode step = document.LastChild.ChildNodes[i];
 
+            bool isStartOfStep = Int32.Parse(step.ChildNodes[0].InnerText) == 1;
 
+            if (isStartOfStep)
+                index++;
 
-		return p;
+            SpawnInfo spawn = new SpawnInfo();
+            spawn.spawnPos = Int32.Parse(step.ChildNodes[1].InnerText);
+            spawn.destinationPos = Int32.Parse(step.ChildNodes[2].InnerText);
+            spawn.spawnCoolTime = float.Parse(step.ChildNodes[3].InnerText);
+            spawn.SetMoveType(Int32.Parse(step.ChildNodes[4].InnerText));
+            spawn.aimTime = float.Parse(step.ChildNodes[5].InnerText);
+            spawn.SetItemType(Int32.Parse(step.ChildNodes[6].InnerText));
+
+            //step add
+            phase.stepList[index].AddInfo(spawn);
+        }
+
+        //phase add
+
+        return phase;
 	}
 
-	IEnumerator spawnEnemy(){
+
+    IEnumerator spawnEnemy(){
 		mySpawnInfo = myStep.getSpawnInfo ();
 		yield return new WaitForSeconds( mySpawnInfo.spawnCoolTime);
 		EnemyManager.SendMessage ("Spawn",mySpawnInfo);
@@ -116,15 +153,50 @@ public class csStageManager : MonoBehaviour {
 public class SpawnInfo{
 	
 	public enum TYPE{normal=0,slow,fast};
-	public enum ITEM{nul=0,fever,heal};
+	public enum ITEM {none=0,fever,heal};
 
 	public TYPE typeNum;
 	public ITEM itemNum;
 	public float spawnCoolTime;
-	public Vector3 spawnPos;
+	public int spawnPos;
+    public int destinationPos;
+    public float aimTime;
+    public float activeTime;
 
-	public float moveTime;
+    public void SetMoveType(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                typeNum = TYPE.normal;
+                break;
+            case 1:
+                typeNum = TYPE.slow;
+                break;
+            case 2:
+                typeNum = TYPE.fast;
+                break;
+        }   
+    }
+
+    public void SetItemType(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                itemNum = ITEM.none;
+                break;
+            case 1:
+                itemNum = ITEM.fever;
+                break;
+            case 2:
+                itemNum = ITEM.heal;
+                break;
+        }
+    }
+
 }
+
 	
 
 public class Step{
