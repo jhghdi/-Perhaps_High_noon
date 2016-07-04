@@ -9,7 +9,7 @@ public class csNote : MonoBehaviour {
    
 	// Use this for initialization
 	void Start () {
-        scaleSpeed = new Vector3(0.05f, 0.05f, 0.05f);
+        scaleSpeed = new Vector3(1f, 1f, 1f);
     }
 
     public void SetScaleSpeed(float speed)
@@ -22,11 +22,10 @@ public class csNote : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (value.transform.localScale.x > 0)
-            value.transform.localScale -= scaleSpeed;
+			value.transform.localScale -= scaleSpeed*Time.deltaTime;
         else
         {
-            Destroy(transform.parent.gameObject);
-            Destroy(gameObject);
+			transform.parent.SendMessage ("OnHide");
         }
 	}
 
@@ -47,8 +46,11 @@ public class csNote : MonoBehaviour {
         else
             Debug.Log("Miss");
 
-        Destroy(transform.parent.gameObject);
-        Destroy(gameObject);
+
+		transform.parent.SendMessage ("OnHide");
+
         
     }
+
+
 }

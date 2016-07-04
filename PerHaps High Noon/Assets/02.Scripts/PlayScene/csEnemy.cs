@@ -11,8 +11,6 @@ public class csEnemy : MonoBehaviour {
 
    // float moveSpeed = 5.0f;
 
-
-
     // Use this for initialization
     void Start () {
 		Vector3 v = transform.position + Vector3.up *2;
@@ -29,7 +27,6 @@ public class csEnemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
 //        if (isLeft)
 //            transform.Translate(moveSpeed * Time.deltaTime, 0, 0);
 //        else
@@ -65,5 +62,8 @@ public class csEnemy : MonoBehaviour {
          
     //    }
     //}
-
+	void OnHide(){
+		GameObject.Find ("EnemyManager").SendMessage ("OnEnemyDead");
+		gameObject.SetActive (false);
+	}
 }
