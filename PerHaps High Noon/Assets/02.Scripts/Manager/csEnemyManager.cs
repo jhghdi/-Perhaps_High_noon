@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
+
 public class csEnemyManager : MonoBehaviour {
 	public GameObject stageM;
 	//배열로 미리 만들어 놓을 예정
