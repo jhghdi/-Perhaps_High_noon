@@ -1,26 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Linq;
 public class csCamPathManager : MonoBehaviour {
 	public GameObject stageM;
 
-	Transform[] paths;
+	GameObject[] paths;
 	public GameObject player;
 
 	int step_Num=1;
 
 
-	void LoadInfo () {
-		paths = GameObject.Find ("Map").GetComponentsInChildren<Transform> ();
-		player = GameObject.FindWithTag ("Player");
-		stageM = GameObject.Find ("StageManager");
+	public bool LoadInfo () {
+		paths = GameObject.FindGameObjectsWithTag ("Step").OrderBy (g => g.transform.name).ToArray ();
+
+	
+		if (paths == null) {
+			Debug.Log ("load failed");
+			return false;
+		}
+		Debug.Log ("load succes");
+
+		player.transform.position = paths [0].GetComponent<iTweenPath> ().nodes [0];
+		return true;
 	}
 
 	void Move(){
-		if (step_Num == 1)
-			player.transform.position = paths [step_Num].GetComponent<iTweenPath> ().nodes [0];
-		Debug.Log ("step_num"+step_Num);
-		Debug.Log (paths [step_Num].name);
+
 		Hashtable hash = new Hashtable ();
 
 		hash.Add ("path", 
@@ -34,14 +39,15 @@ public class csCamPathManager : MonoBehaviour {
 		//hash.Add ("easetype", iTween.EaseType.easeInExpo);
 		hash.Add ("easetype", iTween.EaseType.linear);
 
+		hash.Add ("ignoretimescale", false);
+
 		hash.Add ("oncomplete", "OnCameraEnded");
 		hash.Add ("oncompletetarget", stageM);
 
-		hash.Add ("ignoretimescale", true);
+
 
 		iTween.MoveTo (player, hash);
 
-		step_Num += paths[step_Num].childCount;
 		step_Num++;
 	}
 }
