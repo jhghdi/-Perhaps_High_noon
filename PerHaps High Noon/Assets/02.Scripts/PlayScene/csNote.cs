@@ -4,12 +4,13 @@ public class csNote : MonoBehaviour {
 
     public GameObject value;
     public GameObject standard;
+    
 
     public Vector3 scaleSpeed;
-   
+
 	// Use this for initialization
 	void Start () {
-        scaleSpeed = new Vector3(0.05f, 0.05f, 0.05f);
+        scaleSpeed = new Vector3(1f, 1f, 1f);
     }
 
     public void SetScaleSpeed(float speed)
@@ -22,11 +23,10 @@ public class csNote : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (value.transform.localScale.x > 0)
-            value.transform.localScale -= scaleSpeed;
+			value.transform.localScale -= scaleSpeed*Time.deltaTime;
         else
         {
-            Destroy(transform.parent.gameObject);
-            Destroy(gameObject);
+			transform.parent.SendMessage ("OnHide");
         }
 	}
 
@@ -36,19 +36,21 @@ public class csNote : MonoBehaviour {
 
         float judgement = Mathf.Abs( (value.transform.localScale.x - stadardScale) / stadardScale);
 
-        if (judgement < 0.1f) 
-            Debug.Log("Perfect");
-        else if(judgement < 0.2f)
-            Debug.Log("Great");
-        else if (judgement < 0.4f)
-            Debug.Log("Good");
-        else if (judgement < 0.5f)
-            Debug.Log("Bad");
-        else
-            Debug.Log("Miss");
+        // fever guage 증가량 및 miss 판별
+        float amount=0;
 
-        Destroy(transform.parent.gameObject);
-        Destroy(gameObject);
-        
+        if (judgement < 0.1f)
+            amount = 4.0f;
+        else if (judgement < 0.4f)
+            amount = 3.0f;
+        else if (judgement < 0.8f)
+            amount = 2.0f;
+        else if (judgement < 0.99f)
+            amount = 1.0f;
+        else
+            amount = 0;
+
+        transform.parent.SendMessage("ActiveItem", amount);
+        transform.parent.SendMessage ("OnHide");      
     }
 }
