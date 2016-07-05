@@ -86,7 +86,7 @@ public class csEnemy : MonoBehaviour {
         {
             case Common.ITEM_TYPE.NONE:
                 if(!hNote.activeSelf)
-                    valueManager.GainRevengeGuage(amount);
+                    valueManager.SetRevengeGuage(amount);
                 break;
             case Common.ITEM_TYPE.LIFE:
                 valueManager.GainLife();

@@ -9,7 +9,11 @@ public class csValueManager : MonoBehaviour {
     public Button btnRevenge;
     public GameObject player;
     public Image lifeImage;
+
+    // fever 상태 유무
     int fever;
+    const int TRUE = 2;
+    const int FALSE = 1;
 
     private csPlayer playerMethod;
 
@@ -17,7 +21,7 @@ public class csValueManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        fever = 1;
+        fever = FALSE;
         revengeGuage = GetComponent<Slider>();
         btnRevenge = GetComponent<Button>();
         lifeImage = GetComponent<Image>();
@@ -32,14 +36,30 @@ public class csValueManager : MonoBehaviour {
        
     }
 
-    public void GainRevengeGuage(float amount)
+    /// <summary>
+    /// Revenge Guage의 값을 변경한다
+    /// </summary>
+    /// <param name="amount">guage가 증가, 감소하는 값</param>
+    public void SetRevengeGuage(float amount)
     {
-        revengeGuage.value += (fever * amount);
+        if (amount >= 0)
+            revengeGuage.value += (fever * amount);
+        else
+            revengeGuage.value = revengeGuage.value < amount ? 0 : revengeGuage.value - amount;
 
-        if (revengeGuage.value >= 70.0f)
+        if (revengeGuage.value >= 30.0f)
             SetRevengeButton(true);
         else
             SetRevengeButton(false);
+
+    }
+
+    /// <summary>
+    ///  Revenge Guage를 반환한다
+    /// </summary>
+    public float GetRevengeGuage()
+    {
+        return revengeGuage.value;
     }
 
     public void SetRevengeButton(bool isActive)
@@ -65,6 +85,6 @@ public class csValueManager : MonoBehaviour {
 
     public void SetFeverMode(bool isActive)
     {
-        fever = isActive ? 2 : 1;
+        fever = isActive ? TRUE : FALSE;
     }
 }

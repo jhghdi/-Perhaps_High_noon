@@ -6,30 +6,40 @@ using System;
 
 public class csPlayer : MonoBehaviour {
 
-	public GameObject image;
-	public GameObject aimLock;
-	public GameObject aimArrow;
+    public GameObject image;
+    public GameObject aimLock;
+    public GameObject aimArrow;
+    public GameObject valueManager;
+    public int life;
 
-	Vector3 preAimPos;
-	int lock_num =0;
-	bool isHighNoon = false;
-
+    Vector3 preAimPos;
+    csValueManager valueMethod;
+    int lock_num = 0;
+    bool isHighNoon = false;
+  
 
 	// Use this for initialization
 	void Start () {
-
-	}
+        life = 3;
+        valueMethod = valueManager.GetComponent<csValueManager>();
+    }
 
 	// Update is called once per frame
 	void Update ()
 	{
-		
-	}
+        if (isHighNoon)
+            valueMethod.SetRevengeGuage(-0.1667f);
 
-	/// <summary>
-	/// Revenge모드를 활성화/비활성화 한다.
-	/// </summary>
+        if(valueMethod.GetRevengeGuage() == 0 && isHighNoon)
+        {
+            Revenge(Vector3.zero, Common.INPUT.INPUT_END);
+            OnHighNoon();
+        }
+    }
+
+
 	public void OnHighNoon(){
+
 		isHighNoon = !isHighNoon;
 		image.SetActive(isHighNoon);
 
@@ -47,11 +57,6 @@ public class csPlayer : MonoBehaviour {
 		}
 	}
 
-	/// <summary>
-	/// Player의 행동을 지정한다.
-	/// </summary>
-	/// <param name="position">액션을 수행할 위치</param>
-	/// <param name="action">입력받은 액션</param>
 	public void DoAction(Vector3 position, Common.INPUT action)
 	{
 		if (isHighNoon && action != Common.INPUT.INPUT_BEGIN)
@@ -60,11 +65,6 @@ public class csPlayer : MonoBehaviour {
 			Shot(position);
 	}
 
-	/// <summary>
-	/// Revenge 모드를 수행한다
-	/// </summary>
-	/// <param name="position">Revenge모드 액션이 실행될 위치</param>
-	/// <param name="action">입력받은 액션</param>
 	public void Revenge(Vector3 position, Common.INPUT action)
 	{
 		Ray ray = Camera.main.ScreenPointToRay(position);
@@ -102,10 +102,6 @@ public class csPlayer : MonoBehaviour {
 		}
 	}
 
-	/// <summary>
-	/// shot모드(총 발사)를 수행한다.
-	/// </summary>
-	/// <param name="position">shot모드 액션이 실행될 위치</param>
 	public void Shot(Vector3 position)
 	{
 		Ray ray = Camera.main.ScreenPointToRay(position);

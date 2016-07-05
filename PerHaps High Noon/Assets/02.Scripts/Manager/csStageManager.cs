@@ -11,7 +11,7 @@ public class csStageManager : MonoBehaviour {
 	public GameObject CamPathManager;
 	Phase myPhase = null;
 	Step myStep =null;
-	SpawnInfo mySpawnInfo = null;
+	
     string[] phases;
     int phaseNum = 0;
 
@@ -144,7 +144,7 @@ public class csStageManager : MonoBehaviour {
 
 
     IEnumerator spawnEnemy(){
-		mySpawnInfo = myStep.getSpawnInfo ();
+        SpawnInfo mySpawnInfo = myStep.getSpawnInfo ();
 		yield return new WaitForSeconds( mySpawnInfo.spawnCoolTime);
 		EnemyManager.SendMessage ("Spawn",mySpawnInfo);
 	}

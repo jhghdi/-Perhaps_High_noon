@@ -1,6 +1,3 @@
-*.meta
-metadata\
-Library\
 #################
 ## Eclipse
 #################
@@ -225,5 +222,7 @@ pip-log.txt
 *.dll
 *.mdb
 *.asset
-*.asset
-PerHaps High Noon/Library/assetDatabase3
+PerHaps High Noon/Library/
+PerHaps High Noon/Temp/
+Library/
+PerHaps High Noon/Library/metadata/
