@@ -39,7 +39,6 @@ public class csInputManager : MonoBehaviour {
 	}
 
 	public void OnPause(){
-
 		pauseCanvas.SetActive (true);
         Common.isRunning = false;
         Time.timeScale = 0;

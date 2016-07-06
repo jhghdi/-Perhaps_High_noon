@@ -34,5 +34,10 @@ public class iTweenPath : MonoBehaviour
 			return null;
 		}
 	}
+
+    void OnLevelWasLoaded(int level)
+    {
+        paths.Clear();
+    }
 }
 

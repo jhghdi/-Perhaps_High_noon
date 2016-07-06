@@ -11,6 +11,10 @@ public class csStageManager : MonoBehaviour {
 	public GameObject CamPathManager;
 	Phase myPhase = null;
 	Step myStep =null;
+<<<<<<< HEAD
+=======
+	
+>>>>>>> master
     string[] phases;
     int phaseNum = 0;
 
@@ -134,7 +138,7 @@ public class csStageManager : MonoBehaviour {
             spawn.spawnCoolTime = float.Parse(step.ChildNodes[3].InnerText);
             spawn.SetMoveType(Int32.Parse(step.ChildNodes[4].InnerText));
             spawn.aimTime = float.Parse(step.ChildNodes[5].InnerText);
-            spawn.SetItemType(Int32.Parse(step.ChildNodes[6].InnerText));
+            spawn.item = (Common.ITEM_TYPE)(Int32.Parse(step.ChildNodes[6].InnerText));
 
             //step add
             phase.stepList[index].AddInfo(spawn);
@@ -148,8 +152,12 @@ public class csStageManager : MonoBehaviour {
 
 
     IEnumerator spawnEnemy(){
+<<<<<<< HEAD
 		SpawnInfo mySpawnInfo = myStep.getSpawnInfo ();
 	
+=======
+        SpawnInfo mySpawnInfo = myStep.getSpawnInfo ();
+>>>>>>> master
 		yield return new WaitForSeconds( mySpawnInfo.spawnCoolTime);
 
 		EnemyManager.SendMessage ("Spawn",mySpawnInfo);
@@ -167,11 +175,11 @@ public class csStageManager : MonoBehaviour {
 //소환 정보 저장용 클래스
 public class SpawnInfo{
 	
-	public enum TYPE{normal=0,slow,fast};
+	public enum TYPE {normal=0,slow,fast};
 	public enum ITEM {none=0,fever,heal};
 
 	public TYPE typeNum;
-	public ITEM itemNum;
+	public Common.ITEM_TYPE item;
 	public float spawnCoolTime;
 	public int spawnPos;
     public int destinationPos;
@@ -193,23 +201,6 @@ public class SpawnInfo{
                 break;
         }   
     }
-
-    public void SetItemType(int index)
-    {
-        switch (index)
-        {
-            case 0:
-                itemNum = ITEM.none;
-                break;
-            case 1:
-                itemNum = ITEM.fever;
-                break;
-            case 2:
-                itemNum = ITEM.heal;
-                break;
-        }
-    }
-
 }
 
 	

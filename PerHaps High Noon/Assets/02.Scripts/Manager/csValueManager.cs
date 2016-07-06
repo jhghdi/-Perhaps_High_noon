@@ -9,7 +9,11 @@ public class csValueManager : MonoBehaviour {
     public Button btnRevenge;
     public GameObject player;
     public Image lifeImage;
+
+    // fever 상태 유무
     int fever;
+    const int TRUE = 2;
+    const int FALSE = 1;
 
     private csPlayer playerMethod;
 
@@ -17,14 +21,20 @@ public class csValueManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        fever = 1;
-        revengeGuage = GetComponent<Slider>();
-        btnRevenge = GetComponent<Button>();
-        lifeImage = GetComponent<Image>();
+   
+        life = new Queue<Image>();
+        revengeGuage = GameObject.Find("RevengeGuage").GetComponent<Slider>();
+        btnRevenge = GameObject.Find("BtnHigh").GetComponent<Button>();
         playerMethod = player.GetComponent<csPlayer>();
 
+//        btnRevenge.enabled = false;
+        fever = FALSE;
+
         for (int i = 0; i < playerMethod.life; ++i)
-            GainLife();
+        {
+            Image lifeImg = Instantiate(lifeImage, new Vector3(-590 + (60 * i), 330, 0), Quaternion.identity) as Image;
+            life.Enqueue(lifeImg);
+        }
     }
 	
 	// Update is called once per frame
@@ -32,25 +42,39 @@ public class csValueManager : MonoBehaviour {
        
     }
 
-    public void GainRevengeGuage(float amount)
+    public void ActiveRevenge()
     {
-        revengeGuage.value += (fever * amount);
-
-        if (revengeGuage.value >= 70.0f)
-            SetRevengeButton(true);
+        if ( (GetRevengeGuage() >= 30.0f ) || 
+             ((GetRevengeGuage() < 30.0f && playerMethod.isHighNoon)) )
+            playerMethod.OnHighNoon();
         else
-            SetRevengeButton(false);
+            return;
     }
 
-    public void SetRevengeButton(bool isActive)
+    /// <summary>
+    /// Revenge Guage의 값을 변경한다
+    /// </summary>
+    /// <param name="amount">guage가 증가, 감소하는 값</param>
+    public void SetRevengeGuage(float amount)
     {
-        btnRevenge.enabled = isActive;
+        if (amount >= 0)
+            revengeGuage.value += (fever * amount);
+        else 
+            revengeGuage.value = revengeGuage.value < amount ? 0 : revengeGuage.value + amount;
+    }
+
+    /// <summary>
+    ///  Revenge Guage를 반환한다
+    /// </summary>
+    public float GetRevengeGuage()
+    {
+        return revengeGuage.value;
     }
 
     public void GainLife()
     {
         int count = life.Count;
-           Image lifeImg = Instantiate(lifeImage, new Vector3(-590 + (60 *count), 330, 0), Quaternion.identity) as Image;
+        Image lifeImg = Instantiate(lifeImage, new Vector3(-590 + (60 *count), 330, 0), Quaternion.identity) as Image;
         life.Enqueue(lifeImg);
         ++playerMethod.life;
     }
@@ -65,6 +89,6 @@ public class csValueManager : MonoBehaviour {
 
     public void SetFeverMode(bool isActive)
     {
-        fever = isActive ? 2 : 1;
+        fever = isActive ? TRUE : FALSE;
     }
 }
