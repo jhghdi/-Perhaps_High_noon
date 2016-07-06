@@ -3,36 +3,19 @@
 public class csEnemy : MonoBehaviour {
 
     public GameObject stadardNote;
-    public GameObject lifeNote;
-    public GameObject feverNote;
     public GameObject highnoonNote;
-	GameObject sNote;
+    GameObject sNote;
 	GameObject hNote;
 
-    public float itemType;
+    public Common.ITEM_TYPE itemType;
 
-    csValueManager valueManager;
+    csValueManager valueMethod;
 
     // Use this for initialization
     void Start () {
-        valueManager = new csValueManager();
-
-        Vector3 v = transform.position + Vector3.up *2;
-
-		sNote = Instantiate(stadardNote, v, Quaternion.identity) as GameObject;
-		sNote.transform.parent = transform;
-		sNote.SetActive (true);
-
-		hNote = Instantiate(highnoonNote, v, Quaternion.identity) as GameObject;
-		hNote.transform.parent = transform;
-		hNote.SetActive (false);
+        valueMethod = GameObject.Find("ValueManager").GetComponent<csValueManager>();
     }
 	
-	// Update is called once per frame
-	void Update () {
-
-    }
-
     public void OnChangeNote(bool isHighNoon)
 	{
 		if (isHighNoon) {
@@ -49,24 +32,30 @@ public class csEnemy : MonoBehaviour {
 		gameObject.SetActive (false);
 	}
 
-
-    void createNpte()
+    public void CreateNote()
     {
+        // Aim 생성
         Vector3 v = transform.position + Vector3.up * 2;
+        sNote = Instantiate(stadardNote, v, Quaternion.identity) as GameObject;
+        hNote = Instantiate(highnoonNote, v, Quaternion.identity) as GameObject;
 
-        Common.ITEM_TYPE item = (Common.ITEM_TYPE)itemType;
-
-        if (Common.ITEM_TYPE.NONE.Equals(itemType))
-            sNote = Instantiate(stadardNote, v, Quaternion.identity) as GameObject;
-        else if (Common.ITEM_TYPE.LIFE.Equals(itemType))
-            sNote = Instantiate(lifeNote, v, Quaternion.identity) as GameObject;
-        else if (Common.ITEM_TYPE.FEVER.Equals(itemType))
-            sNote = Instantiate(feverNote, v, Quaternion.identity) as GameObject;
+        // itemType 지정
+        switch (itemType)
+        {
+            case Common.ITEM_TYPE.NONE:
+                sNote.GetComponent<csNote>().type = Common.ITEM_TYPE.NONE;
+                break;
+            case Common.ITEM_TYPE.LIFE:
+                sNote.GetComponent<csNote>().type = Common.ITEM_TYPE.LIFE;
+                break;
+            case Common.ITEM_TYPE.FEVER:
+                sNote.GetComponent<csNote>().type = Common.ITEM_TYPE.FEVER;
+                break;
+        }
 
         sNote.transform.parent = transform;
         sNote.SetActive(true);
 
-        hNote = Instantiate(highnoonNote, v, Quaternion.identity) as GameObject;
         hNote.transform.parent = transform;
         hNote.SetActive(false);
     }
@@ -76,25 +65,25 @@ public class csEnemy : MonoBehaviour {
         // amount == 0 -> miss! (life 깎는다).
         if (amount == 0)
         {
-            valueManager.ReduceLife();
+            valueMethod.ReduceLife();
             return;
         }
-
-        Common.ITEM_TYPE item = (Common.ITEM_TYPE)itemType;
-
-        switch (item)
+        
+        // ItemType에 따른 사용
+        switch (itemType)
         {
             case Common.ITEM_TYPE.NONE:
                 if(!hNote.activeSelf)
-                    valueManager.SetRevengeGuage(amount);
+                    valueMethod.SetRevengeGuage(amount);
                 break;
             case Common.ITEM_TYPE.LIFE:
-                valueManager.GainLife();
+                valueMethod.GainLife();
                 break;
             case Common.ITEM_TYPE.FEVER:
-                valueManager.SetFeverMode(true);
+                valueMethod.SetFeverMode(true);
                 break;
         }
+
     }
 
 }

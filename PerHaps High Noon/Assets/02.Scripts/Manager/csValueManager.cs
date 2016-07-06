@@ -21,19 +21,34 @@ public class csValueManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        fever = FALSE;
-        revengeGuage = GetComponent<Slider>();
-        btnRevenge = GetComponent<Button>();
-        lifeImage = GetComponent<Image>();
+   
+        life = new Queue<Image>();
+        revengeGuage = GameObject.Find("RevengeGuage").GetComponent<Slider>();
+        btnRevenge = GameObject.Find("BtnHigh").GetComponent<Button>();
         playerMethod = player.GetComponent<csPlayer>();
 
+//        btnRevenge.enabled = false;
+        fever = FALSE;
+
         for (int i = 0; i < playerMethod.life; ++i)
-            GainLife();
+        {
+            Image lifeImg = Instantiate(lifeImage, new Vector3(-590 + (60 * i), 330, 0), Quaternion.identity) as Image;
+            life.Enqueue(lifeImg);
+        }
     }
 	
 	// Update is called once per frame
 	void Update () {
        
+    }
+
+    public void ActiveRevenge()
+    {
+        if ( (GetRevengeGuage() >= 30.0f ) || 
+             ((GetRevengeGuage() < 30.0f && playerMethod.isHighNoon)) )
+            playerMethod.OnHighNoon();
+        else
+            return;
     }
 
     /// <summary>
@@ -44,14 +59,8 @@ public class csValueManager : MonoBehaviour {
     {
         if (amount >= 0)
             revengeGuage.value += (fever * amount);
-        else
-            revengeGuage.value = revengeGuage.value < amount ? 0 : revengeGuage.value - amount;
-
-        if (revengeGuage.value >= 30.0f)
-            SetRevengeButton(true);
-        else
-            SetRevengeButton(false);
-
+        else 
+            revengeGuage.value = revengeGuage.value < amount ? 0 : revengeGuage.value + amount;
     }
 
     /// <summary>
@@ -62,15 +71,10 @@ public class csValueManager : MonoBehaviour {
         return revengeGuage.value;
     }
 
-    public void SetRevengeButton(bool isActive)
-    {
-        btnRevenge.enabled = isActive;
-    }
-
     public void GainLife()
     {
         int count = life.Count;
-           Image lifeImg = Instantiate(lifeImage, new Vector3(-590 + (60 *count), 330, 0), Quaternion.identity) as Image;
+        Image lifeImg = Instantiate(lifeImage, new Vector3(-590 + (60 *count), 330, 0), Quaternion.identity) as Image;
         life.Enqueue(lifeImg);
         ++playerMethod.life;
     }

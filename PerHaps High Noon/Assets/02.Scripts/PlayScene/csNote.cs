@@ -4,13 +4,51 @@ public class csNote : MonoBehaviour {
 
     public GameObject value;
     public GameObject standard;
-    
+    public GameObject life;
+    public GameObject fever;
 
     public Vector3 scaleSpeed;
+
+    private GameObject defaultAim;
+    private GameObject lifeAim;
+    private GameObject feverAim;
+
+    private float judgementStandard;
+    // note의 종류
+    public Common.ITEM_TYPE type;
 
 	// Use this for initialization
 	void Start () {
         scaleSpeed = new Vector3(1f, 1f, 1f);
+        judgementStandard = standard.transform.localScale.x;
+
+        defaultAim = Instantiate(standard, transform.position, Quaternion.identity) as GameObject;
+        defaultAim.transform.parent = transform;
+        defaultAim.SetActive(false);
+        lifeAim = Instantiate(life, transform.position, Quaternion.identity) as GameObject;
+        lifeAim.transform.parent = transform;
+        lifeAim.SetActive(false);
+        feverAim = Instantiate(fever, transform.position, Quaternion.identity) as GameObject;
+        feverAim.transform.parent = transform;
+        feverAim.SetActive(false);
+
+        switch (type)
+        {
+            case Common.ITEM_TYPE.NONE:
+                defaultAim.SetActive(true);
+                break;
+            case Common.ITEM_TYPE.LIFE:
+                lifeAim.SetActive(true);
+                break;
+            case Common.ITEM_TYPE.FEVER:
+                feverAim.SetActive(true);
+                break;
+        }
+    }
+
+    void onEnable()
+    {
+
     }
 
     public void SetScaleSpeed(float speed)
@@ -27,25 +65,24 @@ public class csNote : MonoBehaviour {
         else
         {
 			transform.parent.SendMessage ("OnHide");
+            value.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
         }
 	}
 
     public void OnTrigger()
     {
-        float stadardScale = standard.transform.localScale.x;
-
-        float judgement = Mathf.Abs( (value.transform.localScale.x - stadardScale) / stadardScale);
+        float judgementResult = Mathf.Abs( (value.transform.localScale.x - judgementStandard) / judgementStandard);
 
         // fever guage 증가량 및 miss 판별
         float amount=0;
 
-        if (judgement < 0.1f)
+        if (judgementResult < 0.1f)
             amount = 4.0f;
-        else if (judgement < 0.4f)
+        else if (judgementResult < 0.4f)
             amount = 3.0f;
-        else if (judgement < 0.8f)
+        else if (judgementResult < 0.8f)
             amount = 2.0f;
-        else if (judgement < 0.99f)
+        else if (judgementResult < 0.99f)
             amount = 1.0f;
         else
             amount = 0;

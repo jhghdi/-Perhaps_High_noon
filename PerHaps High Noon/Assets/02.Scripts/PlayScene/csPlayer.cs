@@ -15,9 +15,8 @@ public class csPlayer : MonoBehaviour {
     Vector3 preAimPos;
     csValueManager valueMethod;
     int lock_num = 0;
-    bool isHighNoon = false;
+    public bool isHighNoon = false;
   
-
 	// Use this for initialization
 	void Start () {
         life = 3;
@@ -30,13 +29,12 @@ public class csPlayer : MonoBehaviour {
         if (isHighNoon)
             valueMethod.SetRevengeGuage(-0.1667f);
 
-        if(valueMethod.GetRevengeGuage() == 0 && isHighNoon)
+        if(valueMethod.GetRevengeGuage() <= 0 && isHighNoon)
         {
             Revenge(Vector3.zero, Common.INPUT.INPUT_END);
             OnHighNoon();
         }
     }
-
 
 	public void OnHighNoon(){
 
