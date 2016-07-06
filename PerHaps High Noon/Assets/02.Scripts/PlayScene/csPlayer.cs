@@ -26,23 +26,26 @@ public class csPlayer : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-        if (isHighNoon)
-            valueMethod.SetRevengeGuage(-0.1667f);
 
-        if(valueMethod.GetRevengeGuage() <= 0 && isHighNoon)
-        {
-            Revenge(Vector3.zero, Common.INPUT.INPUT_END);
-            OnHighNoon();
-        }
-    }
 
+		if (Common.isRunning && isHighNoon)
+			valueMethod.SetRevengeGuage(-10*Time.unscaledDeltaTime);
+
+		if(valueMethod.GetRevengeGuage() == 0 && isHighNoon)
+		{
+			Revenge(Vector3.zero, Common.INPUT.INPUT_END);
+			OnHighNoon();
+		}
+	}
+
+    
 	public void OnHighNoon(){
 
 		isHighNoon = !isHighNoon;
 		image.SetActive(isHighNoon);
 
 		if (isHighNoon) {
-			Time.timeScale = 0.0f;
+			Time.timeScale = 0.01f;
 			lock_num = 0;
 		}
 		else{
@@ -79,7 +82,7 @@ public class csPlayer : MonoBehaviour {
 				GameObject lockObj = Instantiate(aimLock, hit.transform.position, Quaternion.identity) as GameObject;
 				lockObj.transform.parent = hit.transform;
 
-				//선 그 리 기
+
 				if (lock_num != 0)
 				{
 					Vector3 pos = (preAimPos + hit.transform.position) * 0.5f;

@@ -60,11 +60,15 @@ public class csNote : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (!Common.isRunning)
+            return;
         if (value.transform.localScale.x > 0)
 			value.transform.localScale -= scaleSpeed*Time.deltaTime;
         else
         {
 			transform.parent.SendMessage ("OnHide");
+            transform.parent.GetComponent<csEnemy>().ActiveItem(0);
+
             value.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
         }
 	}

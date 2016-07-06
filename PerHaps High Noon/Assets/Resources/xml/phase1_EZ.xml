@@ -3,7 +3,7 @@
   <Step1>
     <Index>1</Index>
     <Spawn>1</Spawn>
-    <Destination>1</Destination>
+    <Destination>2</Destination>
     <ActiveTime>1</ActiveTime>
     <ActiveType>0</ActiveType>
     <AimTime>0</AimTime>
@@ -12,7 +12,7 @@
   <Step1>
     <Index>2</Index>
     <Spawn>2</Spawn>
-    <Destination>2</Destination>
+    <Destination>3</Destination>
     <ActiveTime>2</ActiveTime>
     <ActiveType>0</ActiveType>
     <AimTime>0</AimTime>
@@ -21,7 +21,7 @@
   <Step1>
     <Index>3</Index>
     <Spawn>3</Spawn>
-    <Destination>3</Destination>
+    <Destination>4</Destination>
     <ActiveTime>3</ActiveTime>
     <ActiveType>0</ActiveType>
     <AimTime>0</AimTime>
@@ -30,7 +30,7 @@
   <Step1>
     <Index>4</Index>
     <Spawn>4</Spawn>
-    <Destination>4</Destination>
+    <Destination>0</Destination>
     <ActiveTime>4</ActiveTime>
     <ActiveType>0</ActiveType>
     <AimTime>0</AimTime>
@@ -39,7 +39,7 @@
   <Step2>
     <Index>1</Index>
     <Spawn>1</Spawn>
-    <Destination>1</Destination>
+    <Destination>3</Destination>
     <ActiveTime>1</ActiveTime>
     <ActiveType>0</ActiveType>
     <AimTime>1</AimTime>
@@ -48,7 +48,7 @@
   <Step2>
     <Index>2</Index>
     <Spawn>2</Spawn>
-    <Destination>2</Destination>
+    <Destination>4</Destination>
     <ActiveTime>2</ActiveTime>
     <ActiveType>0</ActiveType>
     <AimTime>1</AimTime>
@@ -57,7 +57,7 @@
   <Step2>
     <Index>3</Index>
     <Spawn>3</Spawn>
-    <Destination>3</Destination>
+    <Destination>0</Destination>
     <ActiveTime>3</ActiveTime>
     <ActiveType>0</ActiveType>
     <AimTime>1</AimTime>
@@ -66,7 +66,7 @@
   <Step2>
     <Index>4</Index>
     <Spawn>4</Spawn>
-    <Destination>4</Destination>
+    <Destination>1</Destination>
     <ActiveTime>4</ActiveTime>
     <ActiveType>0</ActiveType>
     <AimTime>1</AimTime>
@@ -144,76 +144,4 @@
     <AimTime>0</AimTime>
     <ItemType>0</ItemType>
   </Step4>
-  <Step5>
-    <Index>1</Index>
-    <Spawn>1</Spawn>
-    <Destination>1</Destination>
-    <ActiveTime>1</ActiveTime>
-    <ActiveType>0</ActiveType>
-    <AimTime>0</AimTime>
-    <ItemType>0</ItemType>
-  </Step5>
-  <Step5>
-    <Index>2</Index>
-    <Spawn>2</Spawn>
-    <Destination>2</Destination>
-    <ActiveTime>2</ActiveTime>
-    <ActiveType>0</ActiveType>
-    <AimTime>0</AimTime>
-    <ItemType>0</ItemType>
-  </Step5>
-  <Step5>
-    <Index>3</Index>
-    <Spawn>3</Spawn>
-    <Destination>3</Destination>
-    <ActiveTime>3</ActiveTime>
-    <ActiveType>0</ActiveType>
-    <AimTime>0</AimTime>
-    <ItemType>0</ItemType>
-  </Step5>
-  <Step5>
-    <Index>4</Index>
-    <Spawn>4</Spawn>
-    <Destination>4</Destination>
-    <ActiveTime>4</ActiveTime>
-    <ActiveType>0</ActiveType>
-    <AimTime>0</AimTime>
-    <ItemType>0</ItemType>
-  </Step5>
-  <Step5>
-    <Index>5</Index>
-    <Spawn>5</Spawn>
-    <Destination>5</Destination>
-    <ActiveTime>5</ActiveTime>
-    <ActiveType>0</ActiveType>
-    <AimTime>1</AimTime>
-    <ItemType>0</ItemType>
-  </Step5>
-  <Step5>
-    <Index>6</Index>
-    <Spawn>6</Spawn>
-    <Destination>6</Destination>
-    <ActiveTime>6</ActiveTime>
-    <ActiveType>0</ActiveType>
-    <AimTime>1</AimTime>
-    <ItemType>0</ItemType>
-  </Step5>
-  <Step5>
-    <Index>7</Index>
-    <Spawn>7</Spawn>
-    <Destination>7</Destination>
-    <ActiveTime>7</ActiveTime>
-    <ActiveType>0</ActiveType>
-    <AimTime>1</AimTime>
-    <ItemType>0</ItemType>
-  </Step5>
-  <Step5>
-    <Index>8</Index>
-    <Spawn>8</Spawn>
-    <Destination>8</Destination>
-    <ActiveTime>8</ActiveTime>
-    <ActiveType>0</ActiveType>
-    <AimTime>1</AimTime>
-    <ItemType>0</ItemType>
-  </Step5>
 </Phase>

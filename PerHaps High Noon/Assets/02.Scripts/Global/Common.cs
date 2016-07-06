@@ -15,5 +15,7 @@ public static class Common
     /// ITEM 유형
     /// </summary>
     public enum ITEM_TYPE { NONE = 0, LIFE = 1, FEVER = 2 }
+
+    public static bool isRunning = true;
 }
 

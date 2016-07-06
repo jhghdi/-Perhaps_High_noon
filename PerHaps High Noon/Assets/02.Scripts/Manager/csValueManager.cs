@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -8,7 +9,7 @@ public class csValueManager : MonoBehaviour {
     public Slider revengeGuage;
     public Button btnRevenge;
     public GameObject player;
-    public Image lifeImage;
+    public GameObject life;
 
     // fever 상태 유무
     int fever;
@@ -17,24 +18,20 @@ public class csValueManager : MonoBehaviour {
 
     private csPlayer playerMethod;
 
-    Queue<Image> life;
+    GameObject[] lifeImages;
 
 	// Use this for initialization
 	void Start () {
    
-        life = new Queue<Image>();
         revengeGuage = GameObject.Find("RevengeGuage").GetComponent<Slider>();
         btnRevenge = GameObject.Find("BtnHigh").GetComponent<Button>();
         playerMethod = player.GetComponent<csPlayer>();
 
-//        btnRevenge.enabled = false;
         fever = FALSE;
 
-        for (int i = 0; i < playerMethod.life; ++i)
-        {
-            Image lifeImg = Instantiate(lifeImage, new Vector3(-590 + (60 * i), 330, 0), Quaternion.identity) as Image;
-            life.Enqueue(lifeImg);
-        }
+        life.transform.GetChild(0).gameObject.SetActive(true);
+        life.transform.GetChild(1).gameObject.SetActive(true);
+        life.transform.GetChild(2).gameObject.SetActive(true);
     }
 	
 	// Update is called once per frame
@@ -73,18 +70,25 @@ public class csValueManager : MonoBehaviour {
 
     public void GainLife()
     {
-        int count = life.Count;
-        Image lifeImg = Instantiate(lifeImage, new Vector3(-590 + (60 *count), 330, 0), Quaternion.identity) as Image;
-        life.Enqueue(lifeImg);
+        //      Image lifeImg = Instantiate(lifeImage, new Vector3(-590 + (60 *count), 330, 0), Quaternion.identity) as Image;
+
+        if (playerMethod.life >= 5)
+            return;
+
+        life.transform.GetChild(playerMethod.life).gameObject.SetActive(true);
         ++playerMethod.life;
     }
 
     public void ReduceLife()
     {
-        Image lifeImg = life.Dequeue();
-        Destroy(lifeImg.gameObject);
-        --playerMethod.life;
-        SetFeverMode(false);
+        if (playerMethod.life == 1)
+            SceneManager.LoadScene("StageScene");
+        else
+        { 
+            --playerMethod.life;
+            life.transform.GetChild(playerMethod.life).gameObject.SetActive(false);
+            SetFeverMode(false);
+       }
     }
 
     public void SetFeverMode(bool isActive)
