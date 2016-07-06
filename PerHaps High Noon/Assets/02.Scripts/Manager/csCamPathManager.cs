@@ -7,20 +7,23 @@ public class csCamPathManager : MonoBehaviour {
 	GameObject[] paths;
 	public GameObject player;
 
-	int step_Num=1;
+	int step_Num;
 
 
 	public bool LoadInfo () {
 		paths = GameObject.FindGameObjectsWithTag ("Step").OrderBy (g => g.transform.name).ToArray ();
+        step_Num = 0;
 
-	
-		if (paths == null) {
+
+        if (paths == null) {
 			Debug.Log ("load failed");
 			return false;
 		}
 		Debug.Log ("load succes");
-
+        Destroy(player.GetComponent<iTween>());
+            
 		player.transform.position = paths [0].GetComponent<iTweenPath> ().nodes [0];
+		Move ();
 		return true;
 	}
 
