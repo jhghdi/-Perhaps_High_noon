@@ -9,32 +9,43 @@ public class csPlayer : MonoBehaviour {
 	public GameObject image;
 	public GameObject aimLock;
 	public GameObject aimArrow;
+	public GameObject valueManager;
+	public int life;
 
 	Vector3 preAimPos;
-	int lock_num =0;
-	bool isHighNoon = false;
+	csValueManager valueMethod;
+	int lock_num = 0;
+	public bool isHighNoon = false;
 
 
 	// Use this for initialization
 	void Start () {
-
+		life = 3;
+		valueMethod = valueManager.GetComponent<csValueManager>();
 	}
 
 	// Update is called once per frame
 	void Update ()
 	{
-		
+
+		if (Common.isRunning && isHighNoon)
+			valueMethod.SetRevengeGuage(-10*Time.unscaledDeltaTime);
+
+		if(valueMethod.GetRevengeGuage() == 0 && isHighNoon)
+		{
+			Revenge(Vector3.zero, Common.INPUT.INPUT_END);
+			OnHighNoon();
+		}
 	}
 
-	/// <summary>
-	/// Revenge모드를 활성화/비활성화 한다.
-	/// </summary>
+
 	public void OnHighNoon(){
+
 		isHighNoon = !isHighNoon;
 		image.SetActive(isHighNoon);
 
 		if (isHighNoon) {
-			Time.timeScale = 0.0f;
+			Time.timeScale = 0.01f;
 			lock_num = 0;
 		}
 		else{
@@ -47,11 +58,6 @@ public class csPlayer : MonoBehaviour {
 		}
 	}
 
-	/// <summary>
-	/// Player의 행동을 지정한다.
-	/// </summary>
-	/// <param name="position">액션을 수행할 위치</param>
-	/// <param name="action">입력받은 액션</param>
 	public void DoAction(Vector3 position, Common.INPUT action)
 	{
 		if (isHighNoon && action != Common.INPUT.INPUT_BEGIN)
@@ -60,11 +66,6 @@ public class csPlayer : MonoBehaviour {
 			Shot(position);
 	}
 
-	/// <summary>
-	/// Revenge 모드를 수행한다
-	/// </summary>
-	/// <param name="position">Revenge모드 액션이 실행될 위치</param>
-	/// <param name="action">입력받은 액션</param>
 	public void Revenge(Vector3 position, Common.INPUT action)
 	{
 		Ray ray = Camera.main.ScreenPointToRay(position);
@@ -81,7 +82,7 @@ public class csPlayer : MonoBehaviour {
 				GameObject lockObj = Instantiate(aimLock, hit.transform.position, Quaternion.identity) as GameObject;
 				lockObj.transform.parent = hit.transform;
 
-				//선 그 리 기
+
 				if (lock_num != 0)
 				{
 					Vector3 pos = (preAimPos + hit.transform.position) * 0.5f;
@@ -102,10 +103,6 @@ public class csPlayer : MonoBehaviour {
 		}
 	}
 
-	/// <summary>
-	/// shot모드(총 발사)를 수행한다.
-	/// </summary>
-	/// <param name="position">shot모드 액션이 실행될 위치</param>
 	public void Shot(Vector3 position)
 	{
 		Ray ray = Camera.main.ScreenPointToRay(position);

@@ -62,6 +62,8 @@ public class csStageManager : MonoBehaviour {
                 //다음  phase 로딩하기 전에 무브 + 페이드 아웃
                 CamPathManager.SendMessage("Move");
                 CamPathManager.SendMessage("EndPhase");
+                
+                
             }
 
         }

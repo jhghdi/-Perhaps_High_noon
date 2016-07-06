@@ -22,6 +22,8 @@ public class csNote : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (!Common.isRunning)
+            return;
         if (value.transform.localScale.x > 0)
 			value.transform.localScale -= scaleSpeed*Time.deltaTime;
         else
