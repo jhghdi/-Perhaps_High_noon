@@ -6,25 +6,6 @@ using System;
 
 public class csPlayer : MonoBehaviour {
 
-<<<<<<< HEAD
-	public GameObject image;
-	public GameObject aimLock;
-	public GameObject aimArrow;
-	public GameObject valueManager;
-	public int life;
-
-	Vector3 preAimPos;
-	csValueManager valueMethod;
-	int lock_num = 0;
-	public bool isHighNoon = false;
-
-
-	// Use this for initialization
-	void Start () {
-		life = 3;
-		valueMethod = valueManager.GetComponent<csValueManager>();
-	}
-=======
     public GameObject image;
     public GameObject aimLock;
     public GameObject aimArrow;
@@ -41,16 +22,14 @@ public class csPlayer : MonoBehaviour {
         life = 3;
         valueMethod = valueManager.GetComponent<csValueManager>();
     }
->>>>>>> master
 
 	// Update is called once per frame
 	void Update ()
 	{
-<<<<<<< HEAD
-
 		if (Common.isRunning && isHighNoon)
-			valueMethod.SetRevengeGuage(-10*Time.unscaledDeltaTime);
+			valueMethod.AddRevengeGuage(-10*Time.unscaledDeltaTime);
 
+        //
 		if(valueMethod.GetRevengeGuage() == 0 && isHighNoon)
 		{
 			Revenge(Vector3.zero, Common.INPUT.INPUT_END);
@@ -58,19 +37,7 @@ public class csPlayer : MonoBehaviour {
 		}
 	}
 
-
-=======
-        if (isHighNoon)
-            valueMethod.SetRevengeGuage(-0.1667f);
-
-        if(valueMethod.GetRevengeGuage() <= 0 && isHighNoon)
-        {
-            Revenge(Vector3.zero, Common.INPUT.INPUT_END);
-            OnHighNoon();
-        }
-    }
-
->>>>>>> master
+    
 	public void OnHighNoon(){
 
 		isHighNoon = !isHighNoon;
@@ -130,14 +97,17 @@ public class csPlayer : MonoBehaviour {
 		else if(action == Common.INPUT.INPUT_END)
 		{ 
 			GameObject[] objs = GameObject.FindGameObjectsWithTag("AimLock");
-			foreach (GameObject g in objs)
-				GameObject.Destroy(g.transform.parent.gameObject);
+            //조준한 적 갯수만큼 콤보 성공
+            valueMethod.Combo(objs.Length);
+
+            foreach (GameObject g in objs)
+				GameObject.Destroy(g.transform.parent.gameObject);            
 		}
 	}
 
 	public void Shot(Vector3 position)
 	{
-		Ray ray = Camera.main.ScreenPointToRay(position);
+        Ray ray = Camera.main.ScreenPointToRay(position);
 		RaycastHit hit;
 
 		if (!Physics.Raycast(ray, out hit))
@@ -148,6 +118,9 @@ public class csPlayer : MonoBehaviour {
 			csNote note = hit.transform.GetComponentInParent<csNote>();
 			if (note != null)
 				note.OnTrigger();
+
+            //콤보 1 성공
+            valueMethod.Combo(1);
 		}     
 	}
 }

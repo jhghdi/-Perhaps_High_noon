@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -8,33 +9,31 @@ public class csValueManager : MonoBehaviour {
     public Slider revengeGuage;
     public Button btnRevenge;
     public GameObject player;
-    public Image lifeImage;
-
+    public GameObject life;
+    public Text comboText;
     // fever 상태 유무
     int fever;
     const int TRUE = 2;
     const int FALSE = 1;
 
+    int combo_count = 0;
+
     private csPlayer playerMethod;
 
-    Queue<Image> life;
+    GameObject[] lifeImages;
 
 	// Use this for initialization
 	void Start () {
    
-        life = new Queue<Image>();
         revengeGuage = GameObject.Find("RevengeGuage").GetComponent<Slider>();
         btnRevenge = GameObject.Find("BtnHigh").GetComponent<Button>();
         playerMethod = player.GetComponent<csPlayer>();
 
-//        btnRevenge.enabled = false;
         fever = FALSE;
 
-        for (int i = 0; i < playerMethod.life; ++i)
-        {
-            Image lifeImg = Instantiate(lifeImage, new Vector3(-590 + (60 * i), 330, 0), Quaternion.identity) as Image;
-            life.Enqueue(lifeImg);
-        }
+        life.transform.GetChild(0).gameObject.SetActive(true);
+        life.transform.GetChild(1).gameObject.SetActive(true);
+        life.transform.GetChild(2).gameObject.SetActive(true);
     }
 	
 	// Update is called once per frame
@@ -55,10 +54,10 @@ public class csValueManager : MonoBehaviour {
     /// Revenge Guage의 값을 변경한다
     /// </summary>
     /// <param name="amount">guage가 증가, 감소하는 값</param>
-    public void SetRevengeGuage(float amount)
+    public void AddRevengeGuage(float amount)
     {
         if (amount >= 0)
-            revengeGuage.value += (fever * amount);
+            revengeGuage.value += (fever * amount+ combo_count);
         else 
             revengeGuage.value = revengeGuage.value < amount ? 0 : revengeGuage.value + amount;
     }
@@ -73,22 +72,55 @@ public class csValueManager : MonoBehaviour {
 
     public void GainLife()
     {
-        int count = life.Count;
-        Image lifeImg = Instantiate(lifeImage, new Vector3(-590 + (60 *count), 330, 0), Quaternion.identity) as Image;
-        life.Enqueue(lifeImg);
+        //      Image lifeImg = Instantiate(lifeImage, new Vector3(-590 + (60 *count), 330, 0), Quaternion.identity) as Image;
+
+        if (playerMethod.life >= 5)
+            return;
+
+        life.transform.GetChild(playerMethod.life).gameObject.SetActive(true);
         ++playerMethod.life;
     }
 
     public void ReduceLife()
     {
-        Image lifeImg = life.Dequeue();
-        Destroy(lifeImg.gameObject);
-        --playerMethod.life;
-        SetFeverMode(false);
+        //피가 1이면 -> 0 = 게임 종료
+        if (playerMethod.life == 1) { 
+            Common.isRunning = true;
+            Time.timeScale = 1.0f;
+
+            GameObject[] g = GameObject.FindObjectsOfType<GameObject>();
+            foreach (GameObject gg in g)
+            {
+                Destroy(gg);
+            }
+
+            SceneManager.LoadScene("StageScene");
+         }
+        else
+        { 
+            --playerMethod.life;
+            life.transform.GetChild(playerMethod.life).gameObject.SetActive(false);
+            SetFeverMode(false);
+       }
+
+        //피격시 콤보 초기화
+        combo_count = 0;
+        updateCombo();
     }
 
     public void SetFeverMode(bool isActive)
     {
         fever = isActive ? TRUE : FALSE;
+    }
+
+    public void Combo(int count)
+    {
+        combo_count += count;
+        updateCombo();
+    }
+
+    void updateCombo()
+    {
+        comboText.text = string.Format("{0} Combo!", combo_count);
     }
 }
