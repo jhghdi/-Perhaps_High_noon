@@ -5,7 +5,7 @@ public class csStage : MonoBehaviour {
 	public int level = 1;
 	public int stage = 1;
 
-	string[] phase = { "Phase1_1" };
+	string[] phase = { "phase1_EZ" };
 	// Use this for initialization
 	void Start () {
 		DontDestroyOnLoad (this);
@@ -30,6 +30,7 @@ public class csStage : MonoBehaviour {
 
 	public string[] getPhases(){
 		//parse(level,stage)
+
 		return phase;
 	}
 }

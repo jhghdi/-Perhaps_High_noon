@@ -7,11 +7,11 @@ public class csInputManager : MonoBehaviour {
 	/// Player 객체
 	/// </summary>
 	public GameObject player;
-
-	/// <summary>
-	/// Player의 Method 
-	/// </summary>
-	csPlayer playerMethod;
+    iTween playerTween;
+    /// <summary>
+    /// Player의 Method 
+    /// </summary>
+    csPlayer playerMethod;
 
 	// Use this for initialization
 	void Start () {
@@ -39,22 +39,34 @@ public class csInputManager : MonoBehaviour {
 	}
 
 	public void OnPause(){
-
 		pauseCanvas.SetActive (true);
-		Time.timeScale = 0;
+        Common.isRunning = false;
+        Time.timeScale = 0;
+        playerTween = player.GetComponent<iTween>();
+        if(playerTween !=null)
+            playerTween.isRunning = false;
 	}
 
 	public void OnCancel(){
 		pauseCanvas.SetActive (false);
-		Time.timeScale = 1.0f;
-	}
+        Common.isRunning = true;
+        if (!playerMethod.isHighNoon)
+            Time.timeScale = 1.0f;
+
+        if (playerTween != null)
+            playerTween.isRunning = true;
+    }
 
 	public void OnRetire(){
-		Time.timeScale = 1.0f;
-		GameObject[] g = GameObject.FindObjectsOfType<GameObject> ();
+        Common.isRunning = true;
+        Time.timeScale = 1.0f;
+
+        GameObject[] g = GameObject.FindObjectsOfType<GameObject> ();
 		foreach(GameObject gg in g){
 			Destroy (gg);
 		}
+
+       
 		SceneManager.LoadScene ("StageScene");
 	}
 }

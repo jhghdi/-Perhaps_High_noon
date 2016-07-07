@@ -1,33 +1,41 @@
 ﻿using UnityEngine;
-
+using System.Collections;
+using UnityEngine.SceneManagement;
 public class csGameManager : MonoBehaviour {
+	public string level = "EZ";
+	public int stage = 0;
 
-    public GameObject Enemy;
-    public GameObject obj1;
-    public GameObject obj2;
+	string[][] phase = {new string[]{ "Phase1_","Phase2_" },
+		new string[]{ "Phase2_","Phase3_","Phase3_" },
+		new string[]{ "Phase1_","Phase2_","Phase3_" }
+	};
+	// Use this for initialization
+	void Start () {
+		DontDestroyOnLoad (this);
+	}
 
-    private float repwanTime;
-
-    private float time;
-    // Use this for initialization
-    void Start () {
-        repwanTime = 0.2f;
-    }
-	
 	// Update is called once per frame
 	void Update () {
-        if (repwanTime <= time)
-        {
-            int rand = Random.Range(1, 2);
-            Vector3 position = rand == 1 ? obj1.transform.position : obj2.transform.position;
+	
+	}
+	public void OnStage(int s){
+		stage = s;
+		SceneManager.LoadScene ("managerScene");
+	}
 
-			Vector3 v = new Vector3 (Random.Range(-5,5),Random.Range(0.5f,5),Random.Range(-5,5));
-			GameObject obj =  Instantiate(Enemy, v, Quaternion.identity) as GameObject;
+	public void OnLevel(string l){
+		level = l;
+	}
 
-			//obj.SendMessage ("coolTime",Random.Range(1,2));
-            time = 0;
-        }
-        else
-           time += Time.deltaTime;
-    }
+	public void OnBack(){
+		SceneManager.LoadScene ("MainScene");
+	}
+
+	public string[] getPhases(){
+		for (int i = 0; i < phase [stage].Length; i++) {
+			phase [stage] [i] = string.Format ("{0}{1}", phase [stage] [i], level);
+		}
+
+		return phase[stage];
+	}
 }
