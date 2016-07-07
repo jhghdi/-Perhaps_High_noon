@@ -11,10 +11,7 @@ public class csStageManager : MonoBehaviour {
 	public GameObject CamPathManager;
 	Phase myPhase = null;
 	Step myStep =null;
-<<<<<<< HEAD
-=======
-	
->>>>>>> master
+
     string[] phases;
     int phaseNum = 0;
 
@@ -91,19 +88,13 @@ public class csStageManager : MonoBehaviour {
         // xml 파일 형식 정해지면 추가 구현
 
         // xml 지정
-        string strPath = string.Empty;
+        string m_strName = string.Format("xml/{0}", phases[phaseNum]);
 
-        // platform별로 다르게 한다
-        #if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
-                strPath += ("file:///");
-                strPath += (Application.dataPath + "/" + string.Format("xml/{0}.xml", phases[phaseNum]) );
-        #elif UNITY_ANDROID
-                strPath = "jar:file://" + Application.streamingAssetsPath + "!/assets/"+string.Format("xml/{0}.xml", phases[phaseNum]);
-        #endif
-
-        //phase 정보 읽기
         XmlDocument document = new XmlDocument();
-       document.Load(strPath);
+
+        TextAsset textAsset = (TextAsset)Resources.Load(m_strName, typeof(TextAsset));
+        XmlDocument xmldoc = new XmlDocument();
+        document.LoadXml(textAsset.text);
 
         // phase에 step insert
         int itemCount = document.LastChild.ChildNodes.Count;
@@ -152,12 +143,10 @@ public class csStageManager : MonoBehaviour {
 
 
     IEnumerator spawnEnemy(){
-<<<<<<< HEAD
+
 		SpawnInfo mySpawnInfo = myStep.getSpawnInfo ();
 	
-=======
-        SpawnInfo mySpawnInfo = myStep.getSpawnInfo ();
->>>>>>> master
+
 		yield return new WaitForSeconds( mySpawnInfo.spawnCoolTime);
 
 		EnemyManager.SendMessage ("Spawn",mySpawnInfo);

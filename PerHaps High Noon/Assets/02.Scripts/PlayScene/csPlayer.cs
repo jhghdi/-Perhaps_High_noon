@@ -10,6 +10,9 @@ public class csPlayer : MonoBehaviour {
     public GameObject aimLock;
     public GameObject aimArrow;
     public GameObject valueManager;
+
+    Animator animator;
+
     public int life;
 
     Vector3 preAimPos;
@@ -21,6 +24,8 @@ public class csPlayer : MonoBehaviour {
 	void Start () {
         life = 3;
         valueMethod = valueManager.GetComponent<csValueManager>();
+
+        animator = GetComponent<Animator>();
     }
 
 	// Update is called once per frame
@@ -123,4 +128,14 @@ public class csPlayer : MonoBehaviour {
             valueMethod.Combo(1);
 		}     
 	}
+
+    void OnMoveStart()
+    {
+        animator.SetInteger("state", 1);
+    }
+
+    void OnMoveEnd()
+    {
+        animator.SetInteger("state", 0);
+    }
 }

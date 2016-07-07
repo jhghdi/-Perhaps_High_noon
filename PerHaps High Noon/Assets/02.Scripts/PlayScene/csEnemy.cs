@@ -7,13 +7,16 @@ public class csEnemy : MonoBehaviour {
     GameObject sNote;
 	GameObject hNote;
 
+    Animator animator;
+
     public Common.ITEM_TYPE itemType;
 
     csValueManager valueMethod;
 
     // Use this for initialization
-    void Start () {
+    void Awake () {
         valueMethod = GameObject.Find("ValueManager").GetComponent<csValueManager>();
+        animator = GetComponent<Animator>();
     }
 	
     public void OnChangeNote(bool isHighNoon)
@@ -74,7 +77,7 @@ public class csEnemy : MonoBehaviour {
         {
             case Common.ITEM_TYPE.NONE:
                 if(!hNote.activeSelf)
-                    valueMethod.SetRevengeGuage(amount);
+                    valueMethod.AddRevengeGuage(amount);
                 break;
             case Common.ITEM_TYPE.LIFE:
                 valueMethod.GainLife();
@@ -85,5 +88,13 @@ public class csEnemy : MonoBehaviour {
         }
 
     }
+    void OnMoveStart()
+    {
+        animator.SetInteger("state", 1);
+    }
 
+    void OnMoveEnd()
+    {
+        animator.SetInteger("state", 0);
+    }
 }
