@@ -27,9 +27,9 @@ public class csCamPathManager : MonoBehaviour {
 		return true;
 	}
 
-	void Move(){
-
-		Hashtable hash = new Hashtable ();
+	void Move()
+    {   
+        Hashtable hash = new Hashtable ();
 
 		hash.Add ("path", 
 			paths [step_Num].GetComponent<iTweenPath> ().nodes.ToArray());
@@ -45,12 +45,18 @@ public class csCamPathManager : MonoBehaviour {
 		hash.Add ("ignoretimescale", false);
 
 		hash.Add ("oncomplete", "OnCameraEnded");
-		hash.Add ("oncompletetarget", stageM);
-
+		hash.Add ("oncompletetarget", gameObject);
 
 
 		iTween.MoveTo (player, hash);
-
-		step_Num++;
+        player.SendMessage("OnMoveStart");
+        
+        step_Num++;
 	}
+
+    void OnCameraEnded()
+    {
+        player.SendMessage("OnMoveEnd");
+        stageM.SendMessage("OnCameraEnded");
+    }
 }

@@ -9,13 +9,14 @@ public static class Common
     /// <summary>
     /// 입력상태(=입력액션)
     /// </summary>
-    public enum INPUT { INPUT_BEGIN , INPUT_MOVE, INPUT_END }
+    public enum INPUT { INPUT_BEGIN , INPUT_MOVE, INPUT_END, INPUT_NULL }
 
     /// <summary>
     /// ITEM 유형
     /// </summary>
     public enum ITEM_TYPE { NONE = 0, LIFE = 1, FEVER = 2 }
 
+<<<<<<< HEAD
     /// <summary>
     /// 현재 위치에서 aim이 생성되는 위치를 얻는다.
     /// </summary>
@@ -26,6 +27,8 @@ public static class Common
         return position + Vector3.up * 2;
     }
 
+=======
+>>>>>>> Kim-Da-Hun
     public static bool isRunning = true;
 }
 

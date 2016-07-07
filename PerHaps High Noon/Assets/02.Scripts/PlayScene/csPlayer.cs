@@ -10,6 +10,9 @@ public class csPlayer : MonoBehaviour {
     public GameObject aimLock;
     public GameObject aimArrow;
     public GameObject valueManager;
+
+    Animator animator;
+
     public int life;
 
     Vector3 preAimPos;
@@ -21,14 +24,22 @@ public class csPlayer : MonoBehaviour {
 	void Start () {
         life = 3;
         valueMethod = valueManager.GetComponent<csValueManager>();
+
+        animator = GetComponent<Animator>();
     }
 
 	// Update is called once per frame
 	void Update ()
 	{
 		if (Common.isRunning && isHighNoon)
+<<<<<<< HEAD
 			valueMethod.SetRevengeGuage(-10*Time.unscaledDeltaTime);
 
+=======
+			valueMethod.AddRevengeGuage(-10*Time.unscaledDeltaTime);
+
+        //
+>>>>>>> Kim-Da-Hun
 		if(valueMethod.GetRevengeGuage() == 0 && isHighNoon)
 		{
 			Revenge(Vector3.zero, Common.INPUT.INPUT_END);
@@ -96,14 +107,17 @@ public class csPlayer : MonoBehaviour {
 		else if(action == Common.INPUT.INPUT_END)
 		{ 
 			GameObject[] objs = GameObject.FindGameObjectsWithTag("AimLock");
-			foreach (GameObject g in objs)
-				GameObject.Destroy(g.transform.parent.gameObject);
+            //조준한 적 갯수만큼 콤보 성공
+            valueMethod.Combo(objs.Length);
+
+            foreach (GameObject g in objs)
+				GameObject.Destroy(g.transform.parent.gameObject);            
 		}
 	}
 
 	public void Shot(Vector3 position)
 	{
-		Ray ray = Camera.main.ScreenPointToRay(position);
+        Ray ray = Camera.main.ScreenPointToRay(position);
 		RaycastHit hit;
 
 		if (!Physics.Raycast(ray, out hit))
@@ -114,6 +128,19 @@ public class csPlayer : MonoBehaviour {
 			csNote note = hit.transform.GetComponentInParent<csNote>();
 			if (note != null)
 				note.OnTrigger();
+
+            //콤보 1 성공
+            valueMethod.Combo(1);
 		}     
 	}
+
+    void OnMoveStart()
+    {
+        animator.SetInteger("state", 1);
+    }
+
+    void OnMoveEnd()
+    {
+        animator.SetInteger("state", 0);
+    }
 }

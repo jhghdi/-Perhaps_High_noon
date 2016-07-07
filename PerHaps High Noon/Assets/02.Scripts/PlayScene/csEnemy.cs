@@ -8,16 +8,26 @@ public class csEnemy : MonoBehaviour {
     GameObject sNote;
 	GameObject hNote;
 
+<<<<<<< HEAD
     private float aimCoolTime;
+=======
+    Animator animator;
+>>>>>>> Kim-Da-Hun
 
     public Common.ITEM_TYPE itemType;
 
     csValueManager valueMethod;
 
     // Use this for initialization
+<<<<<<< HEAD
     void Start ()
     {
         valueMethod = GameObject.Find("ValueManager").GetComponent<csValueManager>();     
+=======
+    void Awake () {
+        valueMethod = GameObject.Find("ValueManager").GetComponent<csValueManager>();
+        animator = GetComponent<Animator>();
+>>>>>>> Kim-Da-Hun
     }
 	
     public void OnChangeNote(bool isRevenge)
@@ -75,6 +85,13 @@ public class csEnemy : MonoBehaviour {
         // ItemType에 따른 사용
         switch (itemType)
         {
+<<<<<<< HEAD
+=======
+            case Common.ITEM_TYPE.NONE:
+                if(!hNote.activeSelf)
+                    valueMethod.AddRevengeGuage(amount);
+                break;
+>>>>>>> Kim-Da-Hun
             case Common.ITEM_TYPE.LIFE:
                 valueMethod.GainLife();
                 break;
@@ -91,7 +108,12 @@ public class csEnemy : MonoBehaviour {
     {
         this.aimCoolTime = coolTime;
     }
+    void OnMoveStart()
+    {
+        animator.SetInteger("state", 1);
+    }
 
+<<<<<<< HEAD
     IEnumerator OnMoveEnded()
     {
         yield return new WaitForSeconds(aimCoolTime);
@@ -99,5 +121,10 @@ public class csEnemy : MonoBehaviour {
 
         if (itemType != Common.ITEM_TYPE.NONE)
             transform.parent.GetComponent<csEnemyManager>().InitItem(gameObject);
+=======
+    void OnMoveEnd()
+    {
+        animator.SetInteger("state", 0);
+>>>>>>> Kim-Da-Hun
     }
 }

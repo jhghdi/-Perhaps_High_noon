@@ -20,7 +20,12 @@ public class csStageManager : MonoBehaviour {
 		csGameManager cs =  GameObject.Find ("GameManager").GetComponent<csGameManager> ();
         phases = cs.getPhases();
         SceneManager.LoadScene (phases[phaseNum]);
+<<<<<<< HEAD
                
+=======
+
+        
+>>>>>>> Kim-Da-Hun
         myPhase = ParseXML();
         phaseNum++;
 
@@ -89,6 +94,7 @@ public class csStageManager : MonoBehaviour {
 
         // xml 지정
         string m_strName = string.Format("xml/{0}", phases[phaseNum]);
+<<<<<<< HEAD
         string strPath = string.Empty;
 
 
@@ -100,9 +106,17 @@ public class csStageManager : MonoBehaviour {
 
         //       strPath = "jar:file://" + Application.dataPath + "!/assets/"+ m_strName;
         //#endif
+=======
+>>>>>>> Kim-Da-Hun
 
-        //phase 정보 읽기
         XmlDocument document = new XmlDocument();
+<<<<<<< HEAD
+=======
+
+        TextAsset textAsset = (TextAsset)Resources.Load(m_strName, typeof(TextAsset));
+        XmlDocument xmldoc = new XmlDocument();
+        document.LoadXml(textAsset.text);
+>>>>>>> Kim-Da-Hun
 
         TextAsset textAsset = (TextAsset)Resources.Load(m_strName, typeof(TextAsset));
         XmlDocument xmldoc = new XmlDocument();
@@ -157,6 +171,10 @@ public class csStageManager : MonoBehaviour {
     IEnumerator spawnEnemy(){
 
 		SpawnInfo mySpawnInfo = myStep.getSpawnInfo ();
+<<<<<<< HEAD
+=======
+	
+>>>>>>> Kim-Da-Hun
 
 		yield return new WaitForSeconds( mySpawnInfo.spawnCoolTime);
 
