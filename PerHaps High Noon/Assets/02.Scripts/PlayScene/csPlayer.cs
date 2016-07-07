@@ -26,8 +26,6 @@ public class csPlayer : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-
-
 		if (Common.isRunning && isHighNoon)
 			valueMethod.SetRevengeGuage(-10*Time.unscaledDeltaTime);
 

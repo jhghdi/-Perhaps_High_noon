@@ -84,11 +84,11 @@ public class csValueManager : MonoBehaviour {
         if (playerMethod.life == 1)
             SceneManager.LoadScene("StageScene");
         else
-        { 
+        {
             --playerMethod.life;
             life.transform.GetChild(playerMethod.life).gameObject.SetActive(false);
             SetFeverMode(false);
-       }
+        }
     }
 
     public void SetFeverMode(bool isActive)
