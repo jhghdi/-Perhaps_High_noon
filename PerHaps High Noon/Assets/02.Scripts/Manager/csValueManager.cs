@@ -10,7 +10,11 @@ public class csValueManager : MonoBehaviour {
     public Button btnRevenge;
     public GameObject player;
     public GameObject life;
+<<<<<<< HEAD
+
+=======
     public Text comboText;
+>>>>>>> Kim-Da-Hun
     // fever 상태 유무
     int fever;
     const int TRUE = 2;
@@ -83,6 +87,16 @@ public class csValueManager : MonoBehaviour {
 
     public void ReduceLife()
     {
+<<<<<<< HEAD
+        if (playerMethod.life == 1)
+            SceneManager.LoadScene("StageScene");
+        else
+        {
+            --playerMethod.life;
+            life.transform.GetChild(playerMethod.life).gameObject.SetActive(false);
+            SetFeverMode(false);
+        }
+=======
         //피가 1이면 -> 0 = 게임 종료
         if (playerMethod.life == 1) { 
             Common.isRunning = true;
@@ -106,6 +120,7 @@ public class csValueManager : MonoBehaviour {
         //피격시 콤보 초기화
         combo_count = 0;
         updateCombo();
+>>>>>>> Kim-Da-Hun
     }
 
     public void SetFeverMode(bool isActive)

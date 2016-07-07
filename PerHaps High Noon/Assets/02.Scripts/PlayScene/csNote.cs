@@ -4,46 +4,17 @@ public class csNote : MonoBehaviour {
 
     public GameObject value;
     public GameObject standard;
-    public GameObject life;
-    public GameObject fever;
 
     public Vector3 scaleSpeed;
 
-    private GameObject defaultAim;
-    private GameObject lifeAim;
-    private GameObject feverAim;
-
+    // 판정기준 : standard의 크기
     private float judgementStandard;
-    // note의 종류
-    public Common.ITEM_TYPE type;
+  
 
 	// Use this for initialization
 	void Start () {
         scaleSpeed = new Vector3(1f, 1f, 1f);
         judgementStandard = standard.transform.localScale.x;
-
-        defaultAim = Instantiate(standard, transform.position, Quaternion.identity) as GameObject;
-        defaultAim.transform.parent = transform;
-        defaultAim.SetActive(false);
-        lifeAim = Instantiate(life, transform.position, Quaternion.identity) as GameObject;
-        lifeAim.transform.parent = transform;
-        lifeAim.SetActive(false);
-        feverAim = Instantiate(fever, transform.position, Quaternion.identity) as GameObject;
-        feverAim.transform.parent = transform;
-        feverAim.SetActive(false);
-
-        switch (type)
-        {
-            case Common.ITEM_TYPE.NONE:
-                defaultAim.SetActive(true);
-                break;
-            case Common.ITEM_TYPE.LIFE:
-                lifeAim.SetActive(true);
-                break;
-            case Common.ITEM_TYPE.FEVER:
-                feverAim.SetActive(true);
-                break;
-        }
     }
 
     void onEnable()
@@ -62,11 +33,18 @@ public class csNote : MonoBehaviour {
 	void Update () {
         if (!Common.isRunning)
             return;
+<<<<<<< HEAD
+
+=======
+>>>>>>> Kim-Da-Hun
         if (value.transform.localScale.x > 0)
 			value.transform.localScale -= scaleSpeed*Time.deltaTime;
         else
         {
 			transform.parent.SendMessage ("OnHide");
+            transform.parent.GetComponent<csEnemy>().ActiveItem(0);
+
+            // 다시 활성화시 처음 크기로 보이도록
             value.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
         }
 	}

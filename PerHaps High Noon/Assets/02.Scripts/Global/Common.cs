@@ -16,6 +16,19 @@ public static class Common
     /// </summary>
     public enum ITEM_TYPE { NONE = 0, LIFE = 1, FEVER = 2 }
 
+<<<<<<< HEAD
+    /// <summary>
+    /// 현재 위치에서 aim이 생성되는 위치를 얻는다.
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
+    public static Vector3 GetAimPosition(Vector3 position)
+    {
+        return position + Vector3.up * 2;
+    }
+
+=======
+>>>>>>> Kim-Da-Hun
     public static bool isRunning = true;
 }
 

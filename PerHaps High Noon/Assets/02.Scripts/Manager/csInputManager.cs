@@ -69,6 +69,10 @@ public class csInputManager : MonoBehaviour {
 		foreach(GameObject gg in g){
 			Destroy (gg);
 		}
+<<<<<<< HEAD
+
+=======
+>>>>>>> Kim-Da-Hun
        
 		SceneManager.LoadScene ("StageScene");
 	}

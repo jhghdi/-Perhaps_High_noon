@@ -32,9 +32,14 @@ public class csPlayer : MonoBehaviour {
 	void Update ()
 	{
 		if (Common.isRunning && isHighNoon)
+<<<<<<< HEAD
+			valueMethod.SetRevengeGuage(-10*Time.unscaledDeltaTime);
+
+=======
 			valueMethod.AddRevengeGuage(-10*Time.unscaledDeltaTime);
 
         //
+>>>>>>> Kim-Da-Hun
 		if(valueMethod.GetRevengeGuage() == 0 && isHighNoon)
 		{
 			Revenge(Vector3.zero, Common.INPUT.INPUT_END);
