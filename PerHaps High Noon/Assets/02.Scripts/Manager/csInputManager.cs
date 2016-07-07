@@ -25,17 +25,21 @@ public class csInputManager : MonoBehaviour {
 		if (Input.touches.Length > 0) {
 			Touch touch = Input.touches [0];
 			Vector3 position = touch.position;
-			Common.INPUT inputStatus = Common.INPUT.INPUT_BEGIN;
+			Common.INPUT inputStatus = Common.INPUT.INPUT_NULL;
 
-			if (touch.phase == TouchPhase.Began)
-				inputStatus = Common.INPUT.INPUT_BEGIN;
-			else if (touch.phase == TouchPhase.Moved)
-				inputStatus = Common.INPUT.INPUT_MOVE;
-			else if (touch.phase == TouchPhase.Ended)
-				inputStatus = Common.INPUT.INPUT_END;
+            if (touch.phase == TouchPhase.Began)
+            {
+                inputStatus = Common.INPUT.INPUT_BEGIN;
+            }
+            else if (touch.phase == TouchPhase.Moved)
+                inputStatus = Common.INPUT.INPUT_MOVE;
+            else if (touch.phase == TouchPhase.Ended)
+                inputStatus = Common.INPUT.INPUT_END;
 
-			playerMethod.DoAction (position, inputStatus);
-		}
+            if(inputStatus != Common.INPUT.INPUT_NULL)
+                playerMethod.DoAction(position, inputStatus);
+
+        }
 	}
 
 	public void OnPause(){
@@ -65,7 +69,6 @@ public class csInputManager : MonoBehaviour {
 		foreach(GameObject gg in g){
 			Destroy (gg);
 		}
-
        
 		SceneManager.LoadScene ("StageScene");
 	}

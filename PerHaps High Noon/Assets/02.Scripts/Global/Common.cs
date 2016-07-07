@@ -9,7 +9,7 @@ public static class Common
     /// <summary>
     /// 입력상태(=입력액션)
     /// </summary>
-    public enum INPUT { INPUT_BEGIN , INPUT_MOVE, INPUT_END }
+    public enum INPUT { INPUT_BEGIN , INPUT_MOVE, INPUT_END, INPUT_NULL }
 
     /// <summary>
     /// ITEM 유형
