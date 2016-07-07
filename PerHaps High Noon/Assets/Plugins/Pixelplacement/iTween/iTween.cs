@@ -1444,7 +1444,7 @@ public class iTween : MonoBehaviour{
 				args["rotation"]=new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,transform.eulerAngles.z);
 				args["scale"]=new Vector3(transform.localScale.x,transform.localScale.y,transform.localScale.z);
 			}
-		}		
+		}
 		
 		//establish iTween:
 		args["type"]="move";
@@ -6746,8 +6746,7 @@ public class iTween : MonoBehaviour{
 			args["id"] = GenerateID();
 		}
 		if(!args.Contains("target")){
-			args["target"] = target;
-		
+			args ["target"] = target;
 		}		
 
 		tweens.Insert (0, args);
