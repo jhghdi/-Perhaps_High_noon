@@ -36,6 +36,7 @@ public class csInputManager : MonoBehaviour {
             else if (touch.phase == TouchPhase.Ended)
                 inputStatus = Common.INPUT.INPUT_END;
 
+
             if(inputStatus != Common.INPUT.INPUT_NULL)
                 playerMethod.DoAction(position, inputStatus);
 
@@ -69,10 +70,6 @@ public class csInputManager : MonoBehaviour {
 		foreach(GameObject gg in g){
 			Destroy (gg);
 		}
-<<<<<<< HEAD
-
-=======
->>>>>>> Kim-Da-Hun
        
 		SceneManager.LoadScene ("StageScene");
 	}

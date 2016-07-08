@@ -8,7 +8,6 @@ public class csDontDestroy : MonoBehaviour {
 	public GameObject enemyM;
 	public GameObject stageM;
 	public GameObject valueM;
-	public GameObject player;
 	public GameObject pauseCanvas;
 	public GameObject resultCanvas;
 	public GameObject canvas;
@@ -21,16 +20,10 @@ public class csDontDestroy : MonoBehaviour {
 		DontDestroyOnLoad (enemyM);
 		DontDestroyOnLoad (stageM);
 		DontDestroyOnLoad (valueM);
-		DontDestroyOnLoad (player);
 		DontDestroyOnLoad (pauseCanvas);
 		DontDestroyOnLoad (resultCanvas);
 		DontDestroyOnLoad (canvas);
 		DontDestroyOnLoad (eventSystem);
 		DontDestroyOnLoad (this);
-
-
-
 	}
-	
-
 }

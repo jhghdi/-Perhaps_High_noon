@@ -32,21 +32,14 @@ public class csPlayer : MonoBehaviour {
 	void Update ()
 	{
 		if (Common.isRunning && isHighNoon)
-<<<<<<< HEAD
-			valueMethod.SetRevengeGuage(-10*Time.unscaledDeltaTime);
-
-=======
 			valueMethod.AddRevengeGuage(-10*Time.unscaledDeltaTime);
 
-        //
->>>>>>> Kim-Da-Hun
 		if(valueMethod.GetRevengeGuage() == 0 && isHighNoon)
 		{
 			Revenge(Vector3.zero, Common.INPUT.INPUT_END);
 			OnHighNoon();
 		}
 	}
-
     
 	public void OnHighNoon(){
 
@@ -54,7 +47,7 @@ public class csPlayer : MonoBehaviour {
 		image.SetActive(isHighNoon);
 
 		if (isHighNoon) {
-			Time.timeScale = 0.01f;
+			Time.timeScale = 0.0f;
 			lock_num = 0;
 		}
 		else{
@@ -85,12 +78,9 @@ public class csPlayer : MonoBehaviour {
 			if (!Physics.Raycast(ray, out hit))
 				return;
 
-			if (hit.transform.tag.Equals("Aim"))
+			if (hit.transform.tag.Equals("Enemy"))
 			{
 				hit.transform.tag = "AimLock";
-				GameObject lockObj = Instantiate(aimLock, hit.transform.position, Quaternion.identity) as GameObject;
-				lockObj.transform.parent = hit.transform;
-
 
 				if (lock_num != 0)
 				{
@@ -109,9 +99,9 @@ public class csPlayer : MonoBehaviour {
 			GameObject[] objs = GameObject.FindGameObjectsWithTag("AimLock");
             //조준한 적 갯수만큼 콤보 성공
             valueMethod.Combo(objs.Length);
-
+            lock_num = 0;
             foreach (GameObject g in objs)
-				GameObject.Destroy(g.transform.parent.gameObject);            
+                g.SendMessage("OnHide");
 		}
 	}
 
@@ -123,12 +113,10 @@ public class csPlayer : MonoBehaviour {
 		if (!Physics.Raycast(ray, out hit))
 			return;
 
-		if (hit.transform.tag.Equals("Note"))
+		if (hit.transform.tag.Equals("Enemy"))
 		{
-			csNote note = hit.transform.GetComponentInParent<csNote>();
-			if (note != null)
-				note.OnTrigger();
-
+            hit.transform.SendMessage("OnTrigger");
+            
             //콤보 1 성공
             valueMethod.Combo(1);
 		}     

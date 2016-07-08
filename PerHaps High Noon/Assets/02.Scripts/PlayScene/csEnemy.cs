@@ -3,95 +3,152 @@ using System.Collections;
 
 public class csEnemy : MonoBehaviour {
 
-    public GameObject stadardNote;
-    public GameObject highnoonNote;
-    GameObject sNote;
-	GameObject hNote;
+    // value Aim
+    public GameObject value;
+    // judgements Aim
+    public GameObject standard;
 
-<<<<<<< HEAD
+    /// <summary>
+    /// value Aim의 줄어드는 속도
+    /// </summary>
+    public Vector3 scaleSpeed;
+
+    // 판정의 판단기준
+    float judgementStandard;
+
     private float aimCoolTime;
-=======
+
     Animator animator;
->>>>>>> Kim-Da-Hun
+
 
     public Common.ITEM_TYPE itemType;
 
     csValueManager valueMethod;
 
     // Use this for initialization
-<<<<<<< HEAD
-    void Start ()
-    {
-        valueMethod = GameObject.Find("ValueManager").GetComponent<csValueManager>();     
-=======
     void Awake () {
+        scaleSpeed = scaleSpeed = new Vector3(1f, 1f, 1f);
         valueMethod = GameObject.Find("ValueManager").GetComponent<csValueManager>();
         animator = GetComponent<Animator>();
->>>>>>> Kim-Da-Hun
+        judgementStandard = standard.transform.localScale.x;
+        GetComponent<Collider>().enabled = false;
     }
 	
     public void OnChangeNote(bool isRevenge)
 	{
-		if (isRevenge) {
-			sNote.SetActive (false);
-			hNote.SetActive (true);
-		} else {
-			sNote.SetActive (true);
-			hNote.SetActive (false);
-		}
+        if (!standard.activeSelf)
+            return;
+
+        value.SetActive(!isRevenge);
+
+        if (isRevenge) {         
+            standard.GetComponent<Renderer>().material.color = Color.yellow;   
+        } else {
+            standard.GetComponent<Renderer>().material.color = Color.white; 
+        }
 	}
 
+    void Update()
+    {
+        //일시정지 시 리턴
+        if (!Common.isRunning)
+            return;
+        //아직 이동중이여서 에임 활성 X
+        if (!value.activeSelf)
+            return;
+
+        //조준중
+        if (value.transform.localScale.x > 0)
+            value.transform.localScale -= scaleSpeed * Time.deltaTime;
+        else
+        {
+            //공격단계 수정요망
+            //Attack();
+            OnHide();
+            ActiveItem(0);
+
+            // 다시 활성화시 처음 크기로 보이도록
+            value.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
+        }
+    }
+
 	void OnHide(){
-        //기존 노트 초기화
-        sNote.SetActive(false);
-        hNote.SetActive(false);
-        GameObject.Find ("EnemyManager").SendMessage ("OnEnemyDead");
-       
+        transform.parent.SendMessage ("OnEnemyDead");
+        tag = "Enemy";
+        GetComponent<Collider>().enabled = false;
+        value.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
+
+        standard.SetActive(false);
+        value.SetActive(false);
         gameObject.SetActive (false);
 
         if (itemType != Common.ITEM_TYPE.NONE)
             transform.parent.GetComponent<csEnemyManager>().RemoveItem();
     }
 
-    public void CreateNote()
-    {
-        
 
-        if (sNote == null)
-        { 
-            sNote = Instantiate(stadardNote, Common.GetAimPosition(transform.position), Quaternion.identity) as GameObject;
-            sNote.transform.parent = transform;
-            sNote.SetActive(false);
-        }
-        if (hNote == null)
-        { 
-            hNote = Instantiate(highnoonNote, Common.GetAimPosition(transform.position), Quaternion.identity) as GameObject;
-            hNote.transform.parent = transform;
-            hNote.SetActive(false);
-        }      
+    //카메라페스 경로 관리자가 호출
+    void OnMoveStart()
+    {
+        animator.SetInteger("state", 1);
+    }
+
+    public void SetAimCoolTime(float coolTime)
+    {
+        aimCoolTime = coolTime;
+    }
+
+    IEnumerator OnMoveEnd()
+    {
+        yield return new WaitForSeconds(aimCoolTime);
+        standard.SetActive(true);
+        value.SetActive(true);
+        GetComponent<Collider>().enabled = true;
+        standard.GetComponent<Renderer>().material.color = Color.white;
+        OnChangeNote(false);
+
+        // aim을 player 기준으로 보이도록
+        standard.transform.LookAt(GameObject.Find("pPlayer").transform.position + Vector3.up * 1.25f);
+
+        if (itemType != Common.ITEM_TYPE.NONE)
+            transform.parent.GetComponent<csEnemyManager>().InitItem(gameObject);
+        animator.SetInteger("state", 0);
+    }
+
+
+    public void OnTrigger()
+    {
+        float judgementResult = Mathf.Abs((value.transform.localScale.x - judgementStandard) / judgementStandard);
+
+        // fever guage 증가량 및 miss 판별
+        float amount = 1.0f;
+
+        if (judgementResult < 0.1f)
+            amount = 4.0f;
+        else if (judgementResult < 0.4f)
+            amount = 3.0f;
+        else if (judgementResult < 0.8f)
+            amount = 2.0f;
+        else if (judgementResult < 0.99f)
+            amount = 1.0f;
+
+        
+        ActiveItem( amount);
+        OnHide();
+        
     }
 
     public void ActiveItem(float amount)
     {
-        // amount == 0 -> miss! (life 깎는다).
         if (amount == 0)
         {
             valueMethod.ReduceLife();
             return;
         }
-        if (!hNote.activeSelf)
-            valueMethod.SetRevengeGuage(amount);
 
         // ItemType에 따른 사용
         switch (itemType)
         {
-<<<<<<< HEAD
-=======
-            case Common.ITEM_TYPE.NONE:
-                if(!hNote.activeSelf)
-                    valueMethod.AddRevengeGuage(amount);
-                break;
->>>>>>> Kim-Da-Hun
             case Common.ITEM_TYPE.LIFE:
                 valueMethod.GainLife();
                 break;
@@ -99,32 +156,5 @@ public class csEnemy : MonoBehaviour {
                 valueMethod.SetFeverMode(true);
                 break;
         }
-
-        
-
-    }
-
-    public void SetAimCoolTime(float coolTime)
-    {
-        this.aimCoolTime = coolTime;
-    }
-    void OnMoveStart()
-    {
-        animator.SetInteger("state", 1);
-    }
-
-<<<<<<< HEAD
-    IEnumerator OnMoveEnded()
-    {
-        yield return new WaitForSeconds(aimCoolTime);
-        OnChangeNote(false);
-
-        if (itemType != Common.ITEM_TYPE.NONE)
-            transform.parent.GetComponent<csEnemyManager>().InitItem(gameObject);
-=======
-    void OnMoveEnd()
-    {
-        animator.SetInteger("state", 0);
->>>>>>> Kim-Da-Hun
     }
 }

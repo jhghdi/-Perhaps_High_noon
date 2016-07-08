@@ -6,7 +6,6 @@ public class csEnemyManager : MonoBehaviour {
 
     public GameObject stageM;
 	public GameObject enemy1;
-	public GameObject aimLock;
     public GameObject life;
     public GameObject fever;
 
@@ -19,7 +18,6 @@ public class csEnemyManager : MonoBehaviour {
 
     // 각 객체에 대한 배열
     GameObject[] enemies_1;
-	GameObject[] aimLocks;
 
 	int enemyCount=-11;
 	int enemy1_Index = 0;
@@ -30,28 +28,20 @@ public class csEnemyManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         enemies_1 = new GameObject[enemy1_Count];
-		aimLocks = new GameObject[aimCount];
-
-
     }
 
 	void OnLevelWasLoaded(int level){
         step_Count = 1;
 
 		if (level > 2) {
-			
-			for (int i = 0; i < enemy1_Count; i++) {
-                enemies_1[i] = Instantiate (enemy1, Vector3.zero, Quaternion.identity) as GameObject;
+
+            for (int i = 0; i < enemy1_Count; i++)
+            {
+                enemies_1[i] = Instantiate(enemy1, Vector3.zero, Quaternion.identity) as GameObject;
                 enemies_1[i].transform.parent = transform;
                 // enemy의 노트 생성
-                enemies_1[i].GetComponent<csEnemy>().CreateNote();
-                enemies_1[i].SetActive (false);
-			}
-
-			for (int i = 0; i < aimCount; i++) {
-				aimLocks [i] = Instantiate (aimLock, Vector3.zero, Quaternion.identity)as GameObject;
-				aimLocks [i].SetActive (false);
-			}
+                enemies_1[i].SetActive(false);
+            }
 		}
         
         // item 초기화
@@ -103,8 +93,7 @@ public class csEnemyManager : MonoBehaviour {
         e.SetActive (true);
 		e.transform.position = start;
 		e.transform.rotation = Quaternion.Euler (end - start);
-
-		aimLocks [aim_Index].transform.parent = e.transform;
+        
 		aim_Index++;
 
 		Hashtable hash = new Hashtable ();
@@ -114,9 +103,9 @@ public class csEnemyManager : MonoBehaviour {
 		hash.Add ("looptype", iTween.LoopType.none);
 		hash.Add ("easetype", iTween.EaseType.linear);
 		hash.Add ("ignoretimescale", false);
-		hash.Add ("oncomplete", "OnMoveEnded");
+		hash.Add ("oncomplete", "OnMoveEnd");
 		hash.Add ("oncompletetarget", e);
-
+        e.SendMessage("OnMoveStart");
 		iTween.MoveTo (e, hash);
 	}
 
@@ -132,6 +121,7 @@ public class csEnemyManager : MonoBehaviour {
 		enemyCount = n;
 	}
 
+    //적이 움직임이 끝나고 호출함
     public void InitItem(GameObject obj)
     {
         if (obj.GetComponent<csEnemy>().itemType == Common.ITEM_TYPE.LIFE)
