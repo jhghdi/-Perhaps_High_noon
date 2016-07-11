@@ -7,8 +7,6 @@ using System;
 public class csPlayer : MonoBehaviour {
 
     public GameObject image;
-    public GameObject aimLock;
-    public GameObject aimArrow;
     public GameObject valueManager;
 
     Animator animator;
@@ -17,11 +15,25 @@ public class csPlayer : MonoBehaviour {
 
     Vector3 preAimPos;
     csValueManager valueMethod;
-    int lock_num = 0;
     public bool isHighNoon = false;
-  
-	// Use this for initialization
-	void Start () {
+
+
+    public float strikeFrequency = 0.5f;
+    float strikeTracker = 0.0f;
+
+    public float smoothness = 0.5f;
+    public float zigZagIntensity = 5.0f;
+    public float zigZagPerMeter = 5.0f;
+
+    public LineRenderer[] lineRenderers;
+    private int line_iterator = 0;
+
+    private List<Vector3> pathPoints;
+
+
+    // Use this for initialization
+    void Start () {
+        pathPoints = new List<Vector3>();
         life = 3;
         valueMethod = valueManager.GetComponent<csValueManager>();
 
@@ -31,15 +43,37 @@ public class csPlayer : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
+        //게임 중일때 리벤지 모드일 경우 게이지 감소
 		if (Common.isRunning && isHighNoon)
 			valueMethod.AddRevengeGuage(-10*Time.unscaledDeltaTime);
 
+        //리벤지 모드일때 게이지가 0이면 종료
 		if(valueMethod.GetRevengeGuage() == 0 && isHighNoon)
 		{
 			Revenge(Vector3.zero, Common.INPUT.INPUT_END);
 			OnHighNoon();
 		}
-	}
+
+        if (pathPoints.Count > 1)
+        {
+            strikeTracker += Time.unscaledDeltaTime;
+            if (strikeTracker >= strikeFrequency)
+            {
+                strikeTracker = 0.0f;
+                Debug.Log("Light!");
+
+                LightningStrike.Strike(path: pathPoints.ToArray(),
+                lineObject: lineRenderers[line_iterator],
+                zigZagIntensity: zigZagIntensity,
+                zigZagPerMeter: zigZagPerMeter,
+                smoothness: smoothness);
+
+                lineRenderers[line_iterator].GetComponent<Animator>().Play("Fade", 0, 0.0f);
+
+                line_iterator = (line_iterator + 1) % lineRenderers.Length;
+            }
+        }
+    }
     
 	public void OnHighNoon(){
 
@@ -47,11 +81,12 @@ public class csPlayer : MonoBehaviour {
 		image.SetActive(isHighNoon);
 
 		if (isHighNoon) {
-			Time.timeScale = 0.0f;
-			lock_num = 0;
+            Time.timeScale = 0.0f;
 		}
 		else{
-			Time.timeScale = 1.0f;
+            //끝날때 번갯길 초기화
+            pathPoints.Clear();
+            Time.timeScale = 1.0f;
 		}
 		GameObject[] objs = GameObject.FindGameObjectsWithTag ("Enemy");
 
@@ -78,31 +113,27 @@ public class csPlayer : MonoBehaviour {
 			if (!Physics.Raycast(ray, out hit))
 				return;
 
+            //드래그한 적 선 그리기
 			if (hit.transform.tag.Equals("Enemy"))
 			{
 				hit.transform.tag = "AimLock";
 
-				if (lock_num != 0)
-				{
-					Vector3 pos = (preAimPos + hit.transform.position) * 0.5f;
-					Quaternion rot = Quaternion.FromToRotation(Vector3.right, hit.transform.position - preAimPos);
-					GameObject arrow = Instantiate(aimArrow, pos, rot) as GameObject;
-					arrow.transform.parent = hit.transform;
-					arrow.transform.localScale *= Vector3.Distance(hit.transform.position, preAimPos);
-				}
-				preAimPos = hit.transform.position;
-				lock_num++;
+                pathPoints.Add(hit.transform.position + Vector3.up*1.25f);
 			}
 		}
 		else if(action == Common.INPUT.INPUT_END)
 		{ 
 			GameObject[] objs = GameObject.FindGameObjectsWithTag("AimLock");
+            
             //조준한 적 갯수만큼 콤보 성공
             valueMethod.Combo(objs.Length);
-            lock_num = 0;
+
             foreach (GameObject g in objs)
                 g.SendMessage("OnHide");
-		}
+
+            //리벤지 모드를 끝낸다.
+            OnHighNoon();
+        }
 	}
 
 	public void Shot(Vector3 position)

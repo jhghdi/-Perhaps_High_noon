@@ -4064,7 +4064,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 167018}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.29, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -4825,7 +4825,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 190798}
-  m_LocalRotation: {x: -0.093746535, y: 0.6978551, z: 0.707469, w: 0.06080674}
+  m_LocalRotation: {x: -0.09374654, y: 0.6978552, z: 0.70746905, w: 0.060806714}
   m_LocalPosition: {x: -0.05543403, y: 0.0017306843, z: 0.098653734}
   m_LocalScale: {x: 1.0000004, y: 1.0000006, z: 1.0000005}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5114,11 +5114,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 0}
-  aimLock: {fileID: 168852, guid: 3d5da68b501a58a4cab14b14074854d4, type: 2}
-  aimArrow: {fileID: 108972, guid: 811fa969c2b51c64ca82881f8a35092f, type: 2}
   valueManager: {fileID: 0}
-  life: 3
+  life: 0
   isHighNoon: 0
+  strikeFrequency: 0.25
+  smoothness: 0.01
+  zigZagIntensity: 0.5
+  zigZagPerMeter: 1
+  lineRenderers:
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &11486062
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5139,6 +5144,7 @@ MonoBehaviour:
   resultCanvas: {fileID: 0}
   canvas: {fileID: 0}
   eventSystem: {fileID: 0}
+  Bolts: {fileID: 0}
 --- !u!124 &12424748
 Behaviour:
   m_ObjectHideFlags: 1
