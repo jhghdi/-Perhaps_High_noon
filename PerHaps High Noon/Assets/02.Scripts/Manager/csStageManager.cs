@@ -20,12 +20,7 @@ public class csStageManager : MonoBehaviour {
 		csGameManager cs =  GameObject.Find ("GameManager").GetComponent<csGameManager> ();
         phases = cs.getPhases();
         SceneManager.LoadScene (phases[phaseNum]);
-<<<<<<< HEAD
-               
-=======
 
-        
->>>>>>> Kim-Da-Hun
         myPhase = ParseXML();
         phaseNum++;
 
@@ -34,7 +29,6 @@ public class csStageManager : MonoBehaviour {
 	void OnLevelWasLoaded(int level){
 		if (level > 2) {
 			CamPathManager.SendMessage ("LoadInfo");
-            CamPathManager.SendMessage("StartPhase");
         }
 	}
 	void StartSpawn(){
@@ -65,9 +59,6 @@ public class csStageManager : MonoBehaviour {
             else {
                 //다음  phase 로딩하기 전에 무브 + 페이드 아웃
                 CamPathManager.SendMessage("Move");
-                CamPathManager.SendMessage("EndPhase");
-                
-                
             }
 
         }
@@ -88,35 +79,10 @@ public class csStageManager : MonoBehaviour {
 		Debug.Log("parseXML");
 		Phase phase = new Phase ();
 
-        
-
-        // xml 파일 형식 정해지면 추가 구현
-
         // xml 지정
         string m_strName = string.Format("xml/{0}", phases[phaseNum]);
-<<<<<<< HEAD
-        string strPath = string.Empty;
-
-
-        // platform별로 다르게 한다
-        //#if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
-        //        strPath += ("file:///");
-        //        strPath += (Application.dataPath + "/" + m_strName );
-        //#elif UNITY_ANDROID
-
-        //       strPath = "jar:file://" + Application.dataPath + "!/assets/"+ m_strName;
-        //#endif
-=======
->>>>>>> Kim-Da-Hun
 
         XmlDocument document = new XmlDocument();
-<<<<<<< HEAD
-=======
-
-        TextAsset textAsset = (TextAsset)Resources.Load(m_strName, typeof(TextAsset));
-        XmlDocument xmldoc = new XmlDocument();
-        document.LoadXml(textAsset.text);
->>>>>>> Kim-Da-Hun
 
         TextAsset textAsset = (TextAsset)Resources.Load(m_strName, typeof(TextAsset));
         XmlDocument xmldoc = new XmlDocument();
@@ -150,12 +116,16 @@ public class csStageManager : MonoBehaviour {
                 index++;
 
             SpawnInfo spawn = new SpawnInfo();
-            spawn.spawnPos = Int32.Parse(step.ChildNodes[1].InnerText);
-            spawn.destinationPos = Int32.Parse(step.ChildNodes[2].InnerText);
-            spawn.spawnCoolTime = float.Parse(step.ChildNodes[3].InnerText);
-            spawn.SetMoveType(Int32.Parse(step.ChildNodes[4].InnerText));
-            spawn.aimTime = float.Parse(step.ChildNodes[5].InnerText);
-            spawn.item = (Common.ITEM_TYPE)(Int32.Parse(step.ChildNodes[6].InnerText));
+
+            spawn.enemyType = (Common.ENEMY_TYPE)(Int32.Parse(step.ChildNodes[1].InnerText));
+            spawn.spawnPos = Int32.Parse(step.ChildNodes[2].InnerText);
+            spawn.destinationPos = Int32.Parse(step.ChildNodes[3].InnerText);
+            spawn.spawnCoolTime = float.Parse(step.ChildNodes[4].InnerText);
+            spawn.enemyMove = (Common.ENEMY_MOVE_TYPE)(Int32.Parse(step.ChildNodes[5].InnerText));
+            spawn.aimTime = float.Parse(step.ChildNodes[6].InnerText);
+            spawn.item = (Common.ITEM_TYPE)(Int32.Parse(step.ChildNodes[7].InnerText));
+
+
 
             //step add
             phase.stepList[index].AddInfo(spawn);
@@ -163,18 +133,12 @@ public class csStageManager : MonoBehaviour {
         }
 
         //phase add
-
         return phase;
 	}
-
 
     IEnumerator spawnEnemy(){
 
 		SpawnInfo mySpawnInfo = myStep.getSpawnInfo ();
-<<<<<<< HEAD
-=======
-	
->>>>>>> Kim-Da-Hun
 
 		yield return new WaitForSeconds( mySpawnInfo.spawnCoolTime);
 
@@ -193,32 +157,13 @@ public class csStageManager : MonoBehaviour {
 //소환 정보 저장용 클래스
 public class SpawnInfo{
 	
-	public enum TYPE {normal=0,slow,fast};
-	public enum ITEM {none=0,fever,heal};
-
-	public TYPE typeNum;
-	public Common.ITEM_TYPE item;
-	public float spawnCoolTime;
+    public Common.ENEMY_TYPE enemyType;
 	public int spawnPos;
     public int destinationPos;
+    public float spawnCoolTime;
+    public Common.ENEMY_MOVE_TYPE enemyMove;
     public float aimTime;
-    public float activeTime;
-
-    public void SetMoveType(int index)
-    {
-        switch (index)
-        {
-            case 0:
-                typeNum = TYPE.normal;
-                break;
-            case 1:
-                typeNum = TYPE.slow;
-                break;
-            case 2:
-                typeNum = TYPE.fast;
-                break;
-        }   
-    }
+    public Common.ITEM_TYPE item;
 }
 
 	

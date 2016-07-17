@@ -16,7 +16,6 @@ public static class Common
     /// </summary>
     public enum ITEM_TYPE { NONE = 0, LIFE = 1, FEVER = 2 }
 
-<<<<<<< HEAD
     /// <summary>
     /// 현재 위치에서 aim이 생성되는 위치를 얻는다.
     /// </summary>
@@ -24,11 +23,19 @@ public static class Common
     /// <returns></returns>
     public static Vector3 GetAimPosition(Vector3 position)
     {
-        return position + Vector3.up * 2;
+        return position + Vector3.up *2.5f;
     }
 
-=======
->>>>>>> Kim-Da-Hun
+    /// <summary>
+    /// 적의 움직임 유형
+    /// </summary>
+    public enum ENEMY_MOVE_TYPE { NORMAL = 0, PARABOLA, GUIDED };
+
+    /// <summary>
+    /// 적의 유형
+    /// </summary>
+    public enum ENEMY_TYPE { NORMAL = 0, TANKER, DRONE, TURRET, STAGE1_BOSS, STAGE2_BOSS, STAGE3_BOSS};
+
     public static bool isRunning = true;
 }
 
