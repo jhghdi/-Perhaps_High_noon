@@ -36,6 +36,11 @@ public static class Common
     /// </summary>
     public enum ENEMY_TYPE { NORMAL = 0, TANKER, DRONE, TURRET, STAGE1_BOSS, STAGE2_BOSS, STAGE3_BOSS};
 
+
+    /// <summary>
+    /// Boss의 움직임 유형
+    /// </summary>
+    public enum BOSS_ACTION_TYPE { MOVE=0, ATTACK, DEAD };
     public static bool isRunning = true;
 }
 

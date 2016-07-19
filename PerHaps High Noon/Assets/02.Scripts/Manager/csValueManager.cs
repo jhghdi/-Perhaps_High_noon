@@ -24,9 +24,29 @@ public class csValueManager : MonoBehaviour {
 
     GameObject[] lifeImages;
 
-	// Use this for initialization
-	void Start () {
-   
+    /// <summary>
+    /// player life 감소 sound
+    /// </summary>
+    public AudioClip sound_ReduceLife;
+
+
+    /// <summary>
+    /// player life 획득 sound
+    /// </summary>
+    public AudioClip sound_GainLife;
+
+    /// <summary>
+    /// Player 사망시 나오는 sound
+    /// </summary>
+    public AudioClip deadSound;
+
+    /// <summary>
+    /// fever 모드 발동시 나오는 sound
+    /// </summary>
+    public AudioClip feverSound;
+
+    // Use this for initialization
+    void Start () {
         revengeGuage = GameObject.Find("RevengeGuage").GetComponent<Slider>();
         btnRevenge = GameObject.Find("BtnHigh").GetComponent<Button>();
         playerMethod = player.GetComponent<csPlayer>();
@@ -36,11 +56,6 @@ public class csValueManager : MonoBehaviour {
         life.transform.GetChild(0).gameObject.SetActive(true);
         life.transform.GetChild(1).gameObject.SetActive(true);
         life.transform.GetChild(2).gameObject.SetActive(true);
-    }
-	
-	// Update is called once per frame
-	void Update () {
-       
     }
 
     public void ActiveRevenge()
@@ -74,37 +89,44 @@ public class csValueManager : MonoBehaviour {
 
     public void GainLife()
     {
-        //      Image lifeImg = Instantiate(lifeImage, new Vector3(-590 + (60 *count), 330, 0), Quaternion.identity) as Image;
-
         if (playerMethod.life >= 5)
             return;
 
+        csSoundManager.Instance().PlaySfx(sound_GainLife);
+
         life.transform.GetChild(playerMethod.life).gameObject.SetActive(true);
+        
         ++playerMethod.life;
     }
 
     public void ReduceLife()
     {
-
         //피가 1이면 -> 0 = 게임 종료
         if (playerMethod.life == 1) {
             //무적 모드
-            //return;
+            //return; 
             Common.isRunning = true;
             Time.timeScale = 1.0f;
+
+            csSoundManager.Instance().Stop();
+            csSoundManager.Instance().PlaySfx(deadSound);
 
             //모든 객체 제거
             //신전환해도 DonDestroy때문에 제거 안됨.
             GameObject[] g = GameObject.FindObjectsOfType<GameObject>();
             foreach (GameObject gg in g)
             {
-                Destroy(gg);
+                if (gg.gameObject.name == "SoundManager")
+                    continue;
+                else
+                    Destroy(gg);
             }
             
             SceneManager.LoadScene("StageScene");
          }
         else
-        { 
+        {
+            csSoundManager.Instance().PlaySfx(sound_ReduceLife);
             --playerMethod.life;
             life.transform.GetChild(playerMethod.life).gameObject.SetActive(false);
             SetFeverMode(false);
@@ -118,6 +140,9 @@ public class csValueManager : MonoBehaviour {
     public void SetFeverMode(bool isActive)
     {
         fever = isActive ? TRUE : FALSE;
+
+        if (isActive)
+            csSoundManager.Instance().PlaySfx(feverSound);
     }
 
     public void Combo(int count)

@@ -38,16 +38,18 @@ public class csMissile : csEnemyObject
     /// </summary>
     Vector3 wideSpeed;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         distance = transform.position - player.position;
         speed = new Vector3(distance.x / 60, distance.y / 60, distance.z / 60);
         wideSpeed = (isLeft ? Vector3.left : Vector3.right) * 0.2f;
     }
-	
-	// Update is called once per frame
-	new void Update () {
-      
+
+    // Update is called once per frame
+    new void Update()
+    {
+
         //일시정지 시 리턴
         if (!Common.isRunning)
             return;

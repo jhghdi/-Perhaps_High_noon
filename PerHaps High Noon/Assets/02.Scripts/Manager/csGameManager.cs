@@ -9,9 +9,18 @@ public class csGameManager : MonoBehaviour {
 		new string[]{ "Phase2_","Phase3_","Phase3_" },
 		new string[]{ "Phase1_","Phase2_","Phase3_" }
 	};
-	// Use this for initialization
-	void Start () {
-		DontDestroyOnLoad (this);
+
+    public AudioClip stage1Sound;
+    public AudioClip stage2Sound;
+    public AudioClip stage3Sound;
+    public AudioClip mainBgm;
+
+
+    // Use this for initialization
+    void Start () {
+        if (!csSoundManager.Instance().IsPlaying())
+            csSoundManager.Instance().PlayBgm(mainBgm);
+        DontDestroyOnLoad (this);
 	}
 
 	// Update is called once per frame
@@ -20,7 +29,21 @@ public class csGameManager : MonoBehaviour {
 	}
 	public void OnStage(int s){
 		stage = s;
-		SceneManager.LoadScene ("managerScene");
+        
+        switch (s)
+        {
+            case 0:
+                csSoundManager.Instance().PlayBgm(stage1Sound);
+                break;
+            case 1:
+                csSoundManager.Instance().PlayBgm(stage2Sound);
+                break;
+            case 2:
+                csSoundManager.Instance().PlayBgm(stage3Sound);
+                break;
+        }
+        csSoundManager.Instance().PlayButtonSound();
+        SceneManager.LoadScene ("managerScene");
 	}
 
 	public void OnLevel(string l){

@@ -26,6 +26,21 @@ public class csEnemyObject : MonoBehaviour {
 
     protected csEnemyManager enemyManager;
 
+    /// <summary>
+    /// aim 등장시 나오는 sound
+    /// </summary>
+    public AudioClip aimSound;
+
+    /// <summary>
+    /// aim 사망시 나오는 sound
+    /// </summary>
+    public AudioClip destroySound;
+
+    /// <summary>
+    /// player에게 공격시 나오는 sound
+    /// </summary>
+    public AudioClip shotSound;
+
     // hp
     protected int hp ;
 
@@ -80,6 +95,8 @@ public class csEnemyObject : MonoBehaviour {
 
     protected void OnHide()
     {
+//        if(gameObject.tag != "BOSS")
+        //transform.parent.SendMessage("OnEnemyDead");
         enemyManager.SendMessage("OnEnemyDead");
 
         animator.enabled = true;
@@ -91,6 +108,7 @@ public class csEnemyObject : MonoBehaviour {
         gameObject.SetActive(false);
 
         if (itemType != Common.ITEM_TYPE.NONE)
+            //transform.parent.GetComponent<csEnemyManager>().RemoveItem();
             enemyManager.RemoveItem();
     }
 
@@ -130,11 +148,12 @@ public class csEnemyObject : MonoBehaviour {
         {
             ActiveItem(amount);
 
+            // sound 출력
+            csSoundManager.Instance().PlaySfx(destroySound);
+
             SetAimVisible(false);
-          
             //레그돌 애니메이션
             animator.enabled = false;
-           
             //1초동안 굴러다님
             Invoke("OnHide", 1);
         }
@@ -144,6 +163,7 @@ public class csEnemyObject : MonoBehaviour {
     {
         if (amount == 0)
         {
+            csSoundManager.Instance().PlaySfx(shotSound);
             valueMethod.ReduceLife();
             return;
         }
@@ -159,7 +179,8 @@ public class csEnemyObject : MonoBehaviour {
                 break;
         }
     }
-    void SetAimVisible(bool v)
+
+    protected void SetAimVisible(bool v)
     {
         GetComponent<Collider>().enabled = v;
         //조준선 가림
