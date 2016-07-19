@@ -36,8 +36,8 @@ public class csEnemyManager : MonoBehaviour {
     // turret을 찾는데 사용
     string turretName;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         enemies_1 = new GameObject[enemy1_Count];
         enemies_tanker = new GameObject[enemyTanker_Count];
         drones = new GameObject[drone_Count];
@@ -96,7 +96,7 @@ public class csEnemyManager : MonoBehaviour {
 	void Spawn(SpawnInfo si){
 		GameObject e;
 
-        // 시작과 도착지 지정
+        // 시작과 도착지 지정s
         Vector3 start = spawnPoints[si.spawnPos].transform.position;
         Vector3 end = spawnPoints[si.destinationPos].transform.position;
 
@@ -130,7 +130,7 @@ public class csEnemyManager : MonoBehaviour {
 
         // item 종류 지정
         e.GetComponent<csEnemyObject>().itemType = si.item;
-
+      
         // aim대기시간 설정
         e.GetComponent<csEnemyObject>().SetAimCoolTime(si.aimTime);
 
@@ -158,6 +158,7 @@ public class csEnemyManager : MonoBehaviour {
 			stageM.SendMessage ("OnStepEnded");
         else
 		    enemyCount = n;
+        
     }
 
     // 적이 움직임이 끝나고 호출함
@@ -192,7 +193,7 @@ public class csEnemyManager : MonoBehaviour {
             case Common.ENEMY_TYPE.NORMAL:
             case Common.ENEMY_TYPE.TANKER:
                 hash.Add("path", new Vector3[2] { start, end });
-                hash.Add("orienttopath", true);
+                hash.Add("orienttopath", false);
                 hash.Add("speed", 9.0f);
                 hash.Add("looptype", iTween.LoopType.none);
                 hash.Add("easetype", iTween.EaseType.linear);
@@ -204,8 +205,8 @@ public class csEnemyManager : MonoBehaviour {
                 break;
 
             case Common.ENEMY_TYPE.DRONE:
-                hash.Add("path", new Vector3[2] { start , end  });
-                hash.Add("orienttopath", true);
+                hash.Add("path", new Vector3[2] { start + (Vector3.up *4), end + (Vector3.up * 2) });
+                hash.Add("orienttopath", false);
                 hash.Add("speed", 9.0f);
                 hash.Add("looptype", iTween.LoopType.none);
                 hash.Add("easetype", iTween.EaseType.linear);
@@ -218,7 +219,8 @@ public class csEnemyManager : MonoBehaviour {
 
             case Common.ENEMY_TYPE.TURRET:
                 break;
-   
+
+            
         }
     }
 

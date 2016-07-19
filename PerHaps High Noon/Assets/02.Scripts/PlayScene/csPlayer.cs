@@ -13,6 +13,7 @@ public class csPlayer : MonoBehaviour {
     public GameObject valueManager;
 
     public csCamPathManager _CamPathManager;
+  
     //주인공의 애니메이터
     Animator animator;
 
@@ -35,7 +36,7 @@ public class csPlayer : MonoBehaviour {
 
 
     /// <summary>
-    /// 주인공 이동중인시 확인용
+    /// 주인공 이동중인지 확인용
     /// </summary>
     bool isMoving = false;
 
@@ -49,8 +50,19 @@ public class csPlayer : MonoBehaviour {
     public GameObject Shot1;
     public GameObject Wave;
 
+    /// <summary>
+    /// 레이저 sound
+    /// </summary>
+    public AudioClip laserSound;
+
+    /// <summary>
+    /// revenge mode에서 aim 추기 sound
+    /// </summary>
+    public AudioClip revengeAimSound;
+
     //사격 위치
     public Transform gunPos;
+  
     // Use this for initialization
     void Start () {
         pathPoints = new List<Vector3>();
@@ -58,6 +70,8 @@ public class csPlayer : MonoBehaviour {
         valueMethod = valueManager.GetComponent<csValueManager>();
 
         animator = GetComponent<Animator>();
+
+        GetComponent<AudioSource>().Stop();
     }
 
 	void Update ()
@@ -79,7 +93,7 @@ public class csPlayer : MonoBehaviour {
 
         //번개 효과 그리기
         if (pathPoints.Count > 1)
-        {
+        { 
             strikeTracker += Time.unscaledDeltaTime;
             if (strikeTracker >= strikeFrequency)
             {
@@ -121,6 +135,7 @@ public class csPlayer : MonoBehaviour {
         }
 
 		isHighNoon = !isHighNoon;
+        
         //카메라의 스크린 오버레이 스크립트 On/Off
         overImage.enabled = isHighNoon;
         overImage.SetHighnoon(isHighNoon);
@@ -131,14 +146,20 @@ public class csPlayer : MonoBehaviour {
             Time.timeScale = 0.0f;
             //리벤지 대기 모드 애니메이션 전환
             animator.SetInteger("state", 10);
-		}
+            // revenge mode 전용 sound 출력
+          //  csSoundManager.Instance().PauseBgm();
+            GetComponent<AudioSource>().Play();
+        }
 		else{
             //일반 대기모드
             animator.SetInteger("state", 0);
             //끝날때 번갯길 초기화
             pathPoints.Clear();
             Time.timeScale = 1.0f;
-		}
+            // stage bgm sound 출력
+            GetComponent<AudioSource>().Stop();
+         //   csSoundManager.Instance().ResumeBgm();
+        }
 
         //공격중인 Enemy는 원래의 Aim으로 바꿔준다.
         //리벤지 모드로 조준한 Enemy는 태그가 AimLock 임.
@@ -161,6 +182,7 @@ public class csPlayer : MonoBehaviour {
 		else if (!isHighNoon && action == Common.INPUT.INPUT_BEGIN)
 			Shot(position);
 	}
+
     /// <summary>
     /// 리벤지 모드일대는 드래그로 Enemy를 조준한다.
     /// </summary>
@@ -183,7 +205,7 @@ public class csPlayer : MonoBehaviour {
 			if (hit.transform.tag.Equals("Enemy"))
 			{
 				hit.transform.tag = "AimLock";
-
+                csSoundManager.Instance().PlaySfx(revengeAimSound);
                 pathPoints.Add(hit.transform.position + Vector3.up*1.25f);
 			}
 		}
@@ -246,6 +268,7 @@ public class csPlayer : MonoBehaviour {
         OnHighNoon();
         _CamPathManager.EndCameraWork();
     }
+  
     /// <summary>
     /// 일반 모드시 적을 쏜다
     /// </summary>
@@ -260,12 +283,16 @@ public class csPlayer : MonoBehaviour {
 
 		if (hit.transform.tag.Equals("Enemy"))
 		{
+            csSoundManager.Instance().PlaySfx(laserSound);
             Laser_Shot(hit.transform);
 		}     
 	}
 
     void Laser_Shot(Transform _transform)
     {
+        // laser sound
+        csSoundManager.Instance().PlaySfx(laserSound);
+
         //사격 애니메이션
         //사격중이더라도 처음부터 시작
         animator.Play("Fire", 0, 0);

@@ -125,8 +125,6 @@ public class csStageManager : MonoBehaviour {
             spawn.aimTime = float.Parse(step.ChildNodes[6].InnerText);
             spawn.item = (Common.ITEM_TYPE)(Int32.Parse(step.ChildNodes[7].InnerText));
 
-
-
             //step add
             phase.stepList[index].AddInfo(spawn);
 

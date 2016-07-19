@@ -7,6 +7,7 @@ public class csEnemy_Multi : csEnemyObject
     IEnumerator OnMoveEnd()
     {
         yield return new WaitForSeconds(aimCoolTime);
+        csSoundManager.Instance().PlaySfx(aimSound);
         standard.SetActive(true);
         value.SetActive(true);
         GetComponent<Collider>().enabled = true;
