@@ -9,7 +9,7 @@ public static class Common
     /// <summary>
     /// 입력상태(=입력액션)
     /// </summary>
-    public enum INPUT { INPUT_BEGIN , INPUT_MOVE, INPUT_END }
+    public enum INPUT { INPUT_BEGIN , INPUT_MOVE, INPUT_END, INPUT_NULL }
 
     /// <summary>
     /// ITEM 유형
@@ -23,8 +23,18 @@ public static class Common
     /// <returns></returns>
     public static Vector3 GetAimPosition(Vector3 position)
     {
-        return position + Vector3.up * 2;
+        return position + Vector3.up *2.5f;
     }
+
+    /// <summary>
+    /// 적의 움직임 유형
+    /// </summary>
+    public enum ENEMY_MOVE_TYPE { NORMAL = 0, PARABOLA, GUIDED };
+
+    /// <summary>
+    /// 적의 유형
+    /// </summary>
+    public enum ENEMY_TYPE { NORMAL = 0, TANKER, DRONE, TURRET, STAGE1_BOSS, STAGE2_BOSS, STAGE3_BOSS};
 
     public static bool isRunning = true;
 }

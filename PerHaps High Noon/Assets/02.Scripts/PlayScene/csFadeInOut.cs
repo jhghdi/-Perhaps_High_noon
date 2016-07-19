@@ -63,15 +63,16 @@ public class csFadeInOut : MonoBehaviour
         }
 	}
 
-	void EndPhase(){
-		// Make sure the texture is enabled.
-		guiT.enabled = true;
+	public void EndPhase(){
+        // Make sure the texture is enabled.
+        guiT.enabled = true;
 
         phaseEnding = true; 
 	}
 
-    void StartPhase()
+    public void StartPhase()
     {
+
         // Make sure the texture is enabled.
         guiT.enabled = true;
 

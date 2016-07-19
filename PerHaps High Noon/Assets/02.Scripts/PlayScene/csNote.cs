@@ -33,7 +33,10 @@ public class csNote : MonoBehaviour {
 	void Update () {
         if (!Common.isRunning)
             return;
+<<<<<<< HEAD
 
+=======
+>>>>>>> Kim-Da-Hun
         if (value.transform.localScale.x > 0)
 			value.transform.localScale -= scaleSpeed*Time.deltaTime;
         else
